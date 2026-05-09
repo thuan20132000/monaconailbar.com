@@ -1,5 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect, useState, useCallback } from 'react'
 import type { Salon } from '@/types/salon'
 
 interface Props {
@@ -7,7 +10,24 @@ interface Props {
 }
 
 export default function HeroSection({ salon }: Props) {
-  const { name, tagline, description, contact, heroImage, bookingUrl, stats } = salon
+  const { name, tagline, description, contact, heroImage, bookingUrl, stats, photos } = salon
+
+  const slides = [
+    { url: heroImage, alt: `${name} — Nail Salon in ${contact.address.city}` },
+    ...(photos ?? []).map(p => ({ url: p.url, alt: p.alt })),
+  ]
+
+  const [current, setCurrent] = useState(0)
+  const [paused, setPaused] = useState(false)
+
+  const prev = useCallback(() => setCurrent(i => (i - 1 + slides.length) % slides.length), [slides.length])
+  const next = useCallback(() => setCurrent(i => (i + 1) % slides.length), [slides.length])
+
+  useEffect(() => {
+    if (paused) return
+    const id = setInterval(next, 4500)
+    return () => clearInterval(id)
+  }, [paused, next])
 
   return (
     <section className="relative bg-cream overflow-hidden">
@@ -88,18 +108,68 @@ export default function HeroSection({ salon }: Props) {
             )}
           </div>
 
-          {/* ── Image ── */}
-          <div className="order-1 lg:order-2 animate-fade-in relative flex justify-center lg:justify-end">
+          {/* ── Image Slideshow ── */}
+          <div
+            className="order-1 lg:order-2 animate-fade-in relative flex justify-center lg:justify-end"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+          >
             <div className="relative w-full max-w-[520px] h-[400px] sm:h-[520px] lg:h-[600px] rounded-[2rem] overflow-hidden shadow-2xl shadow-charcoal/15">
-              <Image
-                src={heroImage}
-                alt={`${name} — Nail Salon in ${contact.address.city}`}
-                fill
-                className="object-cover"
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-charcoal/25 via-transparent to-transparent" />
+              {/* Slides */}
+              {slides.map((slide, i) => (
+                <div
+                  key={slide.url}
+                  className="absolute inset-0 transition-opacity duration-700 ease-in-out"
+                  style={{ opacity: i === current ? 1 : 0, zIndex: i === current ? 1 : 0 }}
+                >
+                  <Image
+                    src={slide.url}
+                    alt={slide.alt}
+                    fill
+                    className="object-cover"
+                    priority={i === 0}
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </div>
+              ))}
+
+              <div className="absolute inset-0 bg-gradient-to-t from-charcoal/35 via-transparent to-transparent z-10" />
+
+              {/* Prev / Next */}
+              <button
+                onClick={prev}
+                aria-label="Previous image"
+                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/35 transition-all duration-150"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                onClick={next}
+                aria-label="Next image"
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/35 transition-all duration-150"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
+              {/* Dot indicators */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
+                {slides.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrent(i)}
+                    aria-label={`Go to slide ${i + 1}`}
+                    className={`rounded-full transition-all duration-300 ${
+                      i === current
+                        ? 'w-5 h-2 bg-white'
+                        : 'w-2 h-2 bg-white/50 hover:bg-white/75'
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
 
             {/* Accent blobs */}
