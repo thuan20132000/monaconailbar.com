@@ -34,13 +34,13 @@ function getStaticSalonData(_slug: string): Salon {
       facebook: 'https://facebook.com/monaconailbar',
     },
     hours: [
-      { day: 'Monday',    hours: '10am – 7pm' },
-      { day: 'Tuesday',   hours: '10am – 7pm' },
+      { day: 'Monday', hours: '10am – 7pm' },
+      { day: 'Tuesday', hours: '10am – 7pm' },
       { day: 'Wednesday', hours: '10am – 7pm' },
-      { day: 'Thursday',  hours: '10am – 7pm' },
-      { day: 'Friday',    hours: '10am – 7pm' },
-      { day: 'Saturday',  hours: '9am – 6pm' },
-      { day: 'Sunday',    hours: 'By Appointment' },
+      { day: 'Thursday', hours: '10am – 7pm' },
+      { day: 'Friday', hours: '10am – 7pm' },
+      { day: 'Saturday', hours: '9am – 6pm' },
+      { day: 'Sunday', hours: 'By Appointment' },
     ],
     services: [
       {
@@ -119,7 +119,7 @@ function getStaticSalonData(_slug: string): Salon {
       },
     ],
     heroImage:
-      'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1400&q=85',
+      'https://i.pinimg.com/1200x/a6/57/c5/a657c5587cad07a39fcf7feee94a3fc4.jpg',
     bookingUrl: 'https://bookngon.com/book/monaco-nail-bar',
     firstVisitOffer: '15% Off Your First Visit',
     stats: {

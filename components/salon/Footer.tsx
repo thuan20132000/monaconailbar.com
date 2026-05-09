@@ -86,7 +86,7 @@ export default function Footer({ salon }: Props) {
                     rel="noopener noreferrer"
                     className="text-sm hover:text-cream transition-colors flex items-center gap-2"
                   >
-                    <span aria-hidden>◻</span> Instagram
+                    <span aria-hidden>💬</span> Instagram
                   </Link>
                 </li>
               )}
@@ -98,7 +98,7 @@ export default function Footer({ salon }: Props) {
                     rel="noopener noreferrer"
                     className="text-sm hover:text-cream transition-colors flex items-center gap-2"
                   >
-                    <span aria-hidden>◻</span> Facebook
+                    <span aria-hidden>💬</span> Facebook
                   </Link>
                 </li>
               )}
@@ -107,7 +107,7 @@ export default function Footer({ salon }: Props) {
                   href={`tel:${contact.phone}`}
                   className="text-sm hover:text-cream transition-colors flex items-center gap-2"
                 >
-                  <span aria-hidden>◻</span> {contact.phone}
+                  <span aria-hidden>📞</span> {contact.phone}
                 </a>
               </li>
             </ul>
