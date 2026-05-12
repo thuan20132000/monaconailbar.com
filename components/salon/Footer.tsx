@@ -18,7 +18,7 @@ export default function Footer({ salon }: Props) {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="bg-ink text-cream/60">
+    <footer className="bg-ink text-white/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
 
         {/* Top grid */}
@@ -26,15 +26,15 @@ export default function Footer({ salon }: Props) {
 
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <p className="font-serif text-cream text-xl font-semibold mb-3">{name}</p>
-            <p className="text-sm leading-relaxed text-cream/45 max-w-[220px]">
+            <p className="font-serif text-white text-xl font-semibold mb-3">{name}</p>
+            <p className="text-sm leading-relaxed text-white/45 max-w-[220px]">
               Barrie&apos;s premier destination for luxurious, artful nail care.
             </p>
           </div>
 
           {/* Navigate */}
           <div>
-            <h3 className="text-cream text-[0.65rem] font-bold tracking-[0.18em] uppercase mb-5">
+            <h3 className="text-white text-[0.65rem] font-bold tracking-[0.18em] uppercase mb-5">
               Navigate
             </h3>
             <ul className="space-y-3">
@@ -42,7 +42,7 @@ export default function Footer({ salon }: Props) {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-sm hover:text-cream transition-colors duration-200"
+                    className="text-sm hover:text-white transition-colors duration-200"
                   >
                     {link.label}
                   </a>
@@ -53,7 +53,7 @@ export default function Footer({ salon }: Props) {
 
           {/* Services */}
           <div>
-            <h3 className="text-cream text-[0.65rem] font-bold tracking-[0.18em] uppercase mb-5">
+            <h3 className="text-white text-[0.65rem] font-bold tracking-[0.18em] uppercase mb-5">
               Services
             </h3>
             <ul className="space-y-3">
@@ -63,7 +63,7 @@ export default function Footer({ salon }: Props) {
                     href={bookingUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm hover:text-cream transition-colors duration-200"
+                    className="text-sm hover:text-white transition-colors duration-200"
                   >
                     {service.name}
                   </Link>
@@ -74,7 +74,7 @@ export default function Footer({ salon }: Props) {
 
           {/* Connect */}
           <div>
-            <h3 className="text-cream text-[0.65rem] font-bold tracking-[0.18em] uppercase mb-5">
+            <h3 className="text-white text-[0.65rem] font-bold tracking-[0.18em] uppercase mb-5">
               Connect
             </h3>
             <ul className="space-y-3">
@@ -84,12 +84,12 @@ export default function Footer({ salon }: Props) {
                     href={`https://instagram.com/${contact.instagram.replace('@', '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm hover:text-cream transition-colors flex items-center gap-2.5 group"
+                    className="text-sm hover:text-white transition-colors flex items-center gap-2.5 group"
                   >
                     {/* Instagram logo */}
                     <svg
                       aria-hidden
-                      className="w-4 h-4 shrink-0 text-cream/50 group-hover:text-blush transition-colors duration-200"
+                      className="w-4 h-4 shrink-0 text-white/50 group-hover:text-blush transition-colors duration-200"
                       viewBox="0 0 24 24"
                       fill="currentColor"
                     >
@@ -105,12 +105,12 @@ export default function Footer({ salon }: Props) {
                     href={contact.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm hover:text-cream transition-colors flex items-center gap-2.5 group"
+                    className="text-sm hover:text-white transition-colors flex items-center gap-2.5 group"
                   >
                     {/* Facebook logo */}
                     <svg
                       aria-hidden
-                      className="w-4 h-4 shrink-0 text-cream/50 group-hover:text-blush transition-colors duration-200"
+                      className="w-4 h-4 shrink-0 text-white/50 group-hover:text-blush transition-colors duration-200"
                       viewBox="0 0 24 24"
                       fill="currentColor"
                     >
@@ -123,11 +123,11 @@ export default function Footer({ salon }: Props) {
               <li>
                 <a
                   href={`tel:${contact.phone}`}
-                  className="text-sm hover:text-cream transition-colors flex items-center gap-2.5 group"
+                  className="text-sm hover:text-white transition-colors flex items-center gap-2.5 group"
                 >
                   <svg
                     aria-hidden
-                    className="w-4 h-4 shrink-0 text-cream/50 group-hover:text-blush transition-colors duration-200"
+                    className="w-4 h-4 shrink-0 text-white/50 group-hover:text-blush transition-colors duration-200"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -145,7 +145,7 @@ export default function Footer({ salon }: Props) {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-white/[0.08] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-cream/25">
+        <div className="border-t border-white/[0.08] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/25">
           <p>© {year} {name}. All rights reserved.</p>
           <p>
             Powered by{' '}
@@ -153,7 +153,7 @@ export default function Footer({ salon }: Props) {
               href="https://bookngon.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-cream/45 hover:text-cream transition-colors"
+              className="text-white/45 hover:text-white transition-colors"
             >
               Bookngon
             </Link>

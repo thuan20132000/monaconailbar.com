@@ -10,23 +10,23 @@ const config: Config = {
     extend: {
       colors: {
         cream: {
-          DEFAULT: '#FDF6F0',
-          50: '#FEFAF7',
-          100: '#FDF6F0',
-          200: '#F5E8DF',
+          DEFAULT: '#000000',
+          50: '#111111',
+          100: '#000000',
+          200: '#1a1a1a',
         },
         blush: {
-          DEFAULT: '#F2C4CE',
-          light: '#F9DDE3',
-          dark: '#E8A8B5',
+          DEFAULT: '#e8d5a3',
+          light: '#f0e5c0',
+          dark: '#d4b87a',
         },
         mauve: {
-          DEFAULT: '#D4A5A5',
-          dark: '#B8808A',
-          deeper: '#9B6370',
+          DEFAULT: '#caa343',
+          dark: '#a8892d',
+          deeper: '#8a7022',
         },
-        charcoal: '#3D3535',
-        ink: '#241E1E',
+        charcoal: '#ffffff',
+        ink: '#111111',
       },
       fontFamily: {
         serif: ['var(--font-serif)', 'Georgia', 'serif'],

@@ -26,7 +26,7 @@ export default function WhyChooseUs() {
           <p className="text-[0.65rem] font-bold tracking-[0.22em] uppercase text-blush mb-3">
             Why Monaco
           </p>
-          <h2 className="font-serif text-4xl sm:text-5xl font-light text-cream text-balance">
+          <h2 className="font-serif text-4xl sm:text-5xl font-light text-white text-balance">
             More Than a Manicure —{' '}
             <em className="italic text-blush not-italic font-light">An Experience</em>
           </h2>
@@ -40,8 +40,8 @@ export default function WhyChooseUs() {
               className="bg-white/[0.05] border border-white/[0.08] rounded-2xl p-8 hover:bg-white/[0.09] transition-colors duration-300"
             >
               <div className="text-[1.75rem] text-blush mb-5">{reason.icon}</div>
-              <h3 className="font-serif text-xl font-medium text-cream mb-3">{reason.title}</h3>
-              <p className="text-cream/45 text-sm leading-relaxed">{reason.body}</p>
+              <h3 className="font-serif text-xl font-medium text-white mb-3">{reason.title}</h3>
+              <p className="text-white/45 text-sm leading-relaxed">{reason.body}</p>
             </div>
           ))}
         </div>

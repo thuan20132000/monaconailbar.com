@@ -13,10 +13,10 @@ export default function PromoBanner({ offer, bookingUrl }: Props) {
   if (dismissed) return null
 
   return (
-    <div className="relative bg-ink text-cream-50 py-2.5 px-4 text-center text-sm">
+    <div className="relative bg-ink text-white py-2.5 px-4 text-center text-sm">
       <span className="mr-2 text-blush">✦</span>
       <span className="font-medium">{offer}</span>
-      <span className="mx-3 text-cream-50/40">—</span>
+      <span className="mx-3 text-white/40">—</span>
       <Link
         href={bookingUrl}
         target="_blank"
@@ -29,7 +29,7 @@ export default function PromoBanner({ offer, bookingUrl }: Props) {
       <button
         onClick={() => setDismissed(true)}
         aria-label="Dismiss banner"
-        className="absolute right-4 top-1/2 -translate-y-1/2 text-cream-50/50 hover:text-cream-50 transition-colors duration-200 text-xl leading-none"
+        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors duration-200 text-xl leading-none"
       >
         ×
       </button>

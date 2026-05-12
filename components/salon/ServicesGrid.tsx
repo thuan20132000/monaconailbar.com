@@ -27,7 +27,7 @@ export default function ServicesGrid({ services, bookingUrl }: Props) {
           {services.map(service => (
             <article
               key={service.id}
-              className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+              className="group relative bg-white/[0.07] rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
             >
               {/* Image */}
               <div className="relative h-52 overflow-hidden">
@@ -44,7 +44,7 @@ export default function ServicesGrid({ services, bookingUrl }: Props) {
                     href={bookingUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-white text-charcoal text-sm font-semibold px-6 py-2.5 rounded-full hover:bg-mauve hover:text-white transition-colors duration-200 translate-y-3 group-hover:translate-y-0 transition-transform duration-300"
+                    className="bg-mauve text-ink text-sm font-semibold px-6 py-2.5 rounded-full hover:bg-mauve-dark hover:text-white transition-colors duration-200 translate-y-3 group-hover:translate-y-0 transition-transform duration-300"
                   >
                     Book This Service
                   </Link>
