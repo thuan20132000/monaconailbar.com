@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface Props {
   name: string
@@ -34,13 +35,17 @@ export default function Navigation({ name, bookingUrl }: Props) {
           : 'bg-cream-50'
       }`}
     >
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <a
-          href="#"
-          className="font-serif text-[1.2rem] font-semibold tracking-wide text-charcoal hover:text-mauve transition-colors duration-200"
-        >
-          {name}
+        <nav className="relative max-w-7xl mx-auto px-4 sm:px-6 h-32 flex items-center justify-center md:justify-between">
+        {/* Logo — centred on mobile, left-aligned on desktop */}
+        <a href="#" className="flex items-center gap-2.5 group">
+          <Image
+            src="/logo.png"
+            alt={name}
+            width={100}
+            height={100}
+            className="rounded-full object-cover group-hover:opacity-85 transition-opacity duration-200"
+            priority
+          />
         </a>
 
         {/* Desktop links */}
@@ -49,7 +54,7 @@ export default function Navigation({ name, bookingUrl }: Props) {
             <li key={link.label}>
               <a
                 href={link.href}
-                className="text-sm font-medium text-charcoal/65 hover:text-mauve transition-colors duration-200 tracking-wide"
+                className="text-base font-medium text-charcoal/65 hover:text-mauve transition-colors duration-200 tracking-wide"
               >
                 {link.label}
               </a>
@@ -63,15 +68,15 @@ export default function Navigation({ name, bookingUrl }: Props) {
             href={bookingUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-mauve text-white text-sm font-semibold px-6 py-2.5 rounded-full hover:bg-mauve-dark transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm"
+            className="bg-mauve text-white text-base font-semibold px-6 py-2.5 rounded-full hover:bg-mauve-dark transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm"
           >
             Book Now
           </Link>
         </div>
 
-        {/* Hamburger */}
+        {/* Hamburger — absolute right on mobile so logo stays centred */}
         <button
-          className="md:hidden p-2 -mr-2 text-charcoal hover:text-mauve transition-colors"
+          className="md:hidden absolute right-4 p-2 text-charcoal hover:text-mauve transition-colors"
           onClick={() => setMobileOpen(prev => !prev)}
           aria-label="Toggle menu"
           aria-expanded={mobileOpen}
@@ -94,7 +99,7 @@ export default function Navigation({ name, bookingUrl }: Props) {
               <a
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="block text-sm font-medium text-charcoal/70 hover:text-mauve py-2 transition-colors"
+                className="block text-base font-medium text-charcoal/70 hover:text-mauve py-2 transition-colors"
               >
                 {link.label}
               </a>
@@ -105,7 +110,7 @@ export default function Navigation({ name, bookingUrl }: Props) {
               href={bookingUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-center bg-mauve text-white text-sm font-semibold py-3 rounded-full hover:bg-mauve-dark transition-colors"
+              className="block text-center bg-mauve text-white text-base font-semibold py-3 rounded-full hover:bg-mauve-dark transition-colors"
             >
               Book Now
             </Link>
