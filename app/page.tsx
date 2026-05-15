@@ -1,5 +1,40 @@
-import { redirect } from 'next/navigation'
+import { getSalon } from '@/lib/api'
+import PromoBanner from '@/components/salon/PromoBanner'
+import Navigation from '@/components/salon/Navigation'
+import HeroSection from '@/components/salon/HeroSection'
+import TrustStrip from '@/components/salon/TrustStrip'
+import ServicesGrid from '@/components/salon/ServicesGrid'
+import WhyChooseUs from '@/components/salon/WhyChooseUs'
+import Gallery from '@/components/salon/Gallery'
+import HoursContact from '@/components/salon/HoursContact'
+import BookingCTA from '@/components/salon/BookingCTA'
+import Footer from '@/components/salon/Footer'
+import FloatingBookButton from '@/components/salon/FloatingBookButton'
 
-export default function Home() {
-  redirect('/salons/monaco-nail-bar')
+export const revalidate = 3600
+
+export default async function Home() {
+  const salon = await getSalon('monaco-nail-bar')
+
+  return (
+    <div className="min-h-screen bg-cream font-sans">
+      {salon.firstVisitOffer && (
+        <PromoBanner offer={salon.firstVisitOffer} bookingUrl={salon.bookingUrl} />
+      )}
+      <Navigation name={salon.name} bookingUrl={salon.bookingUrl} />
+
+      <main>
+        <HeroSection salon={salon} />
+        <TrustStrip firstVisitOffer={salon.firstVisitOffer} />
+        <ServicesGrid services={salon.services} bookingUrl={salon.bookingUrl} />
+        <WhyChooseUs />
+        <Gallery photos={salon.photos} salonName={salon.name} />
+        <HoursContact salon={salon} />
+        <BookingCTA bookingUrl={salon.bookingUrl} salonName={salon.name} />
+      </main>
+
+      <Footer salon={salon} />
+      <FloatingBookButton bookingUrl={salon.bookingUrl} />
+    </div>
+  )
 }
