@@ -10,7 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 npm install      # install deps
-npm run dev      # dev server at localhost:3000 (redirects / → /salons/monaco-nail-bar)
+npm run dev      # dev server at localhost:3000
 npm run build    # production build (Next.js ISR, revalidate=3600)
 npm run lint     # ESLint
 npm run start    # serve production build
@@ -21,16 +21,14 @@ npm run start    # serve production build
 **Stack:** Next.js 14 (App Router) · TypeScript · Tailwind CSS · `next/font/google`
 
 **Routing:**
-- `/` → redirect to `/salons/monaco-nail-bar`
-- `/salons/[slug]` → `app/salons/[slug]/page.tsx` (SSG + ISR)
+- `/` → `app/page.tsx` — renders the Monaco Nail Bar page directly (SSG + ISR, no redirect)
 
 **Data flow:**
-- `lib/api.ts → getSalon(slug)` — tries `API_BASE_URL/api/salons/:slug` first, falls back to hardcoded static data. Set `API_BASE_URL` in `.env.local` to connect the live API.
-- `generateStaticParams` pre-renders `monaco-nail-bar` at build time.
+- `lib/api.ts → getSalon('monaco-nail-bar')` — tries `API_BASE_URL/api/salons/:slug` first, falls back to hardcoded static data. Set `API_BASE_URL` in `.env.local` to connect the live API.
 - `export const revalidate = 3600` triggers ISR.
 
 **SEO + Schema:**
-- `app/salons/[slug]/layout.tsx` — exports `generateMetadata` (OG, Twitter, canonical) and injects a `<script type="application/ld+json">` `BeautySalon` schema.
+- `app/layout.tsx` — exports `generateMetadata` (OG, Twitter, canonical) and injects a `<script type="application/ld+json">` `BeautySalon` schema.
 
 **Component tree** (all in `components/salon/`):
 ```
