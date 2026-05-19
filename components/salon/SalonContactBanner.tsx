@@ -66,58 +66,57 @@ export default function SalonContactBanner({ contact, bookingUrl }: Props) {
   ].filter(Boolean) as { href: string; label: string; Icon: () => JSX.Element }[]
 
   return (
-    <div className={`hidden md:block sticky top-0 z-[60] bg-ink border-b border-blush/20 font-sans transition-transform duration-300 ease-in-out ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
-      <div className="max-w-7xl mx-auto px-8 flex items-center justify-between h-11">
+    <div className={`sticky top-0 z-[60] bg-ink border-b border-blush/20 font-sans transition-transform duration-300 ease-in-out ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
+      <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between h-11">
 
-        {/* Left — contact details */}
+        {/* Left — phone on mobile, email + phone on desktop */}
         <div className="flex items-center gap-6">
+          {/* Email — desktop only */}
           <a
             href={`mailto:${contact.email}`}
-            className="group flex items-center gap-2 text-white/70 hover:text-white transition-colors duration-200"
+            className="hidden md:flex items-center gap-2 text-white/70 hover:text-white transition-colors duration-200"
           >
             <MailIcon />
             <span className="text-[11px] tracking-wide">{contact.email}</span>
           </a>
 
-          <span className="text-white/15 select-none">◆</span>
+          <span className="hidden md:inline text-white/15 select-none">◆</span>
 
+          {/* Phone — always visible */}
           <a
             href={`tel:${contact.phone.replace(/\D/g, '')}`}
-            className="group flex items-center gap-2 text-white/70 hover:text-white transition-colors duration-200"
+            className="flex items-center gap-2 text-white/70 hover:text-white transition-colors duration-200"
           >
             <PhoneIcon />
             <span className="text-[11px] tracking-wide">{contact.phone}</span>
           </a>
         </div>
 
-        {/* Right — socials + CTA */}
-        <div className="flex items-center gap-5">
+        {/* Right — socials (desktop only) + Book Now (always) */}
+        <div className="flex items-center gap-4 md:gap-5">
           {socials.length > 0 && (
-            <>
-              <div className="flex items-center gap-3.5">
-                {socials.map(({ href, label, Icon }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={label}
-                    className="text-white/50 hover:text-blush hover:scale-110 transition-all duration-200"
-                  >
-                    <Icon />
-                  </a>
-                ))}
-              </div>
-
+            <div className="hidden md:flex items-center gap-3.5">
+              {socials.map(({ href, label, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="text-white/50 hover:text-blush hover:scale-110 transition-all duration-200"
+                >
+                  <Icon />
+                </a>
+              ))}
               <span className="w-px h-4 bg-white/10" />
-            </>
+            </div>
           )}
 
           <a
             href={bookingUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-5 py-1.5 border border-blush/50 hover:border-mauve hover:bg-mauve text-white text-[10px] font-medium tracking-[0.18em] uppercase transition-all duration-300"
+            className="px-4 md:px-5 py-1.5 border border-blush/50 hover:border-mauve hover:bg-mauve text-white text-[10px] font-medium tracking-[0.18em] uppercase transition-all duration-300"
           >
             Book Now
           </a>
