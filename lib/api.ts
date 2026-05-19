@@ -121,7 +121,7 @@ function getStaticSalonData(_slug: string): Salon {
     ],
     heroImage:
       'https://i.pinimg.com/1200x/a6/57/c5/a657c5587cad07a39fcf7feee94a3fc4.jpg',
-    bookingUrl: 'https://bookngon.com/monaco-nail-bar',
+    bookingUrl: 'https://book.bookngon.com/monaco-nail-bar',
     firstVisitOffer: '15% Off Your First Visit',
     stats: {
       clients: 4000,
