@@ -1,4 +1,5 @@
 import { getSalon } from '@/lib/api'
+import SalonContactBanner from '@/components/salon/SalonContactBanner'
 import PromoBanner from '@/components/salon/PromoBanner'
 import Navigation from '@/components/salon/Navigation'
 import HeroSection from '@/components/salon/HeroSection'
@@ -18,9 +19,10 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-cream font-sans">
-      {salon.firstVisitOffer && (
+      <SalonContactBanner contact={salon.contact} bookingUrl={salon.bookingUrl} />
+      {/* {salon.firstVisitOffer && (
         <PromoBanner offer={salon.firstVisitOffer} bookingUrl={salon.bookingUrl} />
-      )}
+      )} */}
       <Navigation name={salon.name} bookingUrl={salon.bookingUrl} />
 
       <main>

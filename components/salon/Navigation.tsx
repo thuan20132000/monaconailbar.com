@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -20,16 +20,28 @@ const NAV_LINKS = [
 export default function Navigation({ name, bookingUrl }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled]     = useState(false)
+  const [bannerVisible, setBannerVisible] = useState(true)
+  const lastY = useRef(0)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 56)
+    const onScroll = () => {
+      const currentY = window.scrollY
+      setScrolled(currentY > 96)
+      if (currentY < 10) {
+        setBannerVisible(true)
+      } else {
+        setBannerVisible(currentY < lastY.current)
+      }
+      lastY.current = currentY
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
+      style={{ top: bannerVisible ? '44px' : '0px' }}
+      className={`sticky z-50 transition-all duration-300 ${
         scrolled
           ? 'bg-cream-50/96 backdrop-blur-sm shadow-sm border-b border-blush/20'
           : 'bg-cream-50'
@@ -62,19 +74,6 @@ export default function Navigation({ name, bookingUrl }: Props) {
           ))}
         </ul>
 
-        {/* Desktop CTA */}
-        <div className="hidden md:block">
-          <Link
-            href={bookingUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-mauve text-white text-base font-semibold px-6 py-2.5 rounded-full hover:bg-mauve-dark transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm"
-          >
-            Book Now
-          </Link>
-        </div>
-
-        {/* Hamburger — absolute right on mobile so logo stays centred */}
         <button
           className="md:hidden absolute right-4 p-2 text-charcoal hover:text-mauve transition-colors"
           onClick={() => setMobileOpen(prev => !prev)}
@@ -105,16 +104,6 @@ export default function Navigation({ name, bookingUrl }: Props) {
               </a>
             </li>
           ))}
-          <li className="pt-3">
-            <Link
-              href={bookingUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-center bg-mauve text-white text-base font-semibold py-3 rounded-full hover:bg-mauve-dark transition-colors"
-            >
-              Book Now
-            </Link>
-          </li>
         </ul>
       </div>
     </header>
