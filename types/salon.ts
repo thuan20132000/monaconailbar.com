@@ -32,6 +32,7 @@ export interface SalonContact {
   address: SalonAddress
   instagram?: string
   facebook?: string
+  tiktok?: string
 }
 
 export interface SalonColors {

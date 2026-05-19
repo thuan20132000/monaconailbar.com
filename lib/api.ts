@@ -32,6 +32,7 @@ function getStaticSalonData(_slug: string): Salon {
       },
       instagram: '@monaconailbar',
       facebook: 'https://facebook.com/monaconailbar',
+      tiktok: 'https://tiktok.com/@monaconailbar',
     },
     hours: [
       { day: 'Monday', hours: '10am – 7pm' },
