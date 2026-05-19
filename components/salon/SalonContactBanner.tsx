@@ -1,3 +1,6 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
 import type { SalonContact } from '@/types/salon'
 
 interface Props {
@@ -39,6 +42,23 @@ export default function SalonContactBanner({ contact, bookingUrl }: Props) {
   const instagramHandle = contact.instagram?.replace('@', '')
   const instagramUrl = instagramHandle ? `https://instagram.com/${instagramHandle}` : null
 
+  const [visible, setVisible] = useState(true)
+  const lastY = useRef(0)
+
+  useEffect(() => {
+    const onScroll = () => {
+      const currentY = window.scrollY
+      if (currentY < 10) {
+        setVisible(true)
+      } else {
+        setVisible(currentY < lastY.current)
+      }
+      lastY.current = currentY
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   const socials = [
     contact.facebook && { href: contact.facebook, label: 'Facebook', Icon: FacebookIcon },
     instagramUrl    && { href: instagramUrl,       label: 'Instagram', Icon: InstagramIcon },
@@ -46,7 +66,7 @@ export default function SalonContactBanner({ contact, bookingUrl }: Props) {
   ].filter(Boolean) as { href: string; label: string; Icon: () => JSX.Element }[]
 
   return (
-    <div className="hidden md:block sticky top-0 z-[60] bg-ink border-b border-blush/20 font-sans">
+    <div className={`hidden md:block sticky top-0 z-[60] bg-ink border-b border-blush/20 font-sans transition-transform duration-300 ease-in-out ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
       <div className="max-w-7xl mx-auto px-8 flex items-center justify-between h-11">
 
         {/* Left — contact details */}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -20,16 +20,28 @@ const NAV_LINKS = [
 export default function Navigation({ name, bookingUrl }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled]     = useState(false)
+  const [bannerVisible, setBannerVisible] = useState(true)
+  const lastY = useRef(0)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 96)
+    const onScroll = () => {
+      const currentY = window.scrollY
+      setScrolled(currentY > 96)
+      if (currentY < 10) {
+        setBannerVisible(true)
+      } else {
+        setBannerVisible(currentY < lastY.current)
+      }
+      lastY.current = currentY
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
     <header
-      className={`sticky top-10 z-50 transition-all duration-300 ${
+      style={{ top: bannerVisible ? '44px' : '0px' }}
+      className={`sticky z-50 transition-all duration-300 ${
         scrolled
           ? 'bg-cream-50/96 backdrop-blur-sm shadow-sm border-b border-blush/20'
           : 'bg-cream-50'
