@@ -114,8 +114,6 @@ export default function SalonContactBanner({ contact, bookingUrl }: Props) {
 
           <a
             href={bookingUrl}
-            target="_blank"
-            rel="noopener noreferrer"
             className="px-4 md:px-5 py-1.5 border border-blush/50 hover:border-mauve hover:bg-mauve text-white text-[10px] font-medium tracking-[0.18em] uppercase transition-all duration-300"
           >
             Book Now

@@ -61,8 +61,6 @@ export default function Footer({ salon }: Props) {
                 <li key={service.id}>
                   <Link
                     href={bookingUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="text-sm hover:text-white transition-colors duration-200"
                   >
                     {service.name}

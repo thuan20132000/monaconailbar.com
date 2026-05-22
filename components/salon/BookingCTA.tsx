@@ -1,16 +1,13 @@
-import Link from 'next/link'
-
 interface Props {
-  bookingUrl: string
   salonName: string
 }
 
 const BADGES = ['Gift Cards Available', 'Walk-ins Welcome', 'No Phone Call Needed']
 
-export default function BookingCTA({ bookingUrl, salonName }: Props) {
+export default function BookingCTA({ salonName }: Props) {
   return (
-    <section className="bg-cream py-20 lg:py-28">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section id="booking" className="bg-cream py-20 lg:py-28 scroll-mt-20">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <p className="text-[0.65rem] font-bold tracking-[0.22em] uppercase text-mauve mb-4">
           Ready?
         </p>
@@ -24,14 +21,15 @@ export default function BookingCTA({ bookingUrl, salonName }: Props) {
           {salonName} in under 60 seconds.
         </p>
 
-        <Link
-          href={bookingUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block bg-mauve text-white font-semibold text-[1.05rem] px-10 py-4 rounded-full shadow-xl shadow-mauve/25 hover:bg-mauve-dark transition-all duration-200 hover:scale-105 active:scale-95 mb-10"
-        >
-          Book My Appointment
-        </Link>
+        <div className="bg-white rounded-3xl shadow-xl shadow-mauve/10 overflow-hidden w-full max-w-4xl mx-auto h-[850px] border border-charcoal/5 relative mb-10">
+          <iframe
+            src="https://book.bookngon.com/monaco-nail-bar/booking"
+            className="w-full h-full border-none absolute top-0 left-0"
+            title={`Book an appointment at ${salonName}`}
+            loading="lazy"
+            allowFullScreen
+          />
+        </div>
 
         {/* Badge row */}
         <div className="flex flex-wrap justify-center gap-x-7 gap-y-3">

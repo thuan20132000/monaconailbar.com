@@ -28,11 +28,11 @@ export default async function Home() {
       <main>
         <HeroSection salon={salon} />
         <TrustStrip firstVisitOffer={salon.firstVisitOffer} />
+        <BookingCTA salonName={salon.name} />
         <ServicesGrid services={salon.services} bookingUrl={salon.bookingUrl} />
         <WhyChooseUs />
         <Gallery photos={salon.photos} salonName={salon.name} />
         <HoursContact salon={salon} />
-        <BookingCTA bookingUrl={salon.bookingUrl} salonName={salon.name} />
       </main>
 
       <Footer salon={salon} />

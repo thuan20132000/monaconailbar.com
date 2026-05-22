@@ -57,8 +57,6 @@ export default function HeroSection({ salon }: Props) {
             <div className="animate-fade-up-3 flex flex-wrap gap-4 mb-14">
               <Link
                 href={bookingUrl}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="bg-mauve text-white font-semibold px-8 py-3.5 rounded-full shadow-lg shadow-mauve/30 hover:bg-mauve-dark transition-all duration-200 hover:scale-105 active:scale-95"
               >
                 Book Appointment

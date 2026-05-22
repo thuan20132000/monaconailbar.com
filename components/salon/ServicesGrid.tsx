@@ -42,8 +42,6 @@ export default function ServicesGrid({ services, bookingUrl }: Props) {
                 <div className="absolute inset-0 bg-ink/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                   <Link
                     href={bookingUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="bg-mauve text-ink text-sm font-semibold px-6 py-2.5 rounded-full hover:bg-mauve-dark hover:text-white transition-colors duration-200 translate-y-3 group-hover:translate-y-0 transition-transform duration-300"
                   >
                     Book This Service
@@ -71,8 +69,6 @@ export default function ServicesGrid({ services, bookingUrl }: Props) {
         <div className="text-center mt-12">
           <Link
             href={bookingUrl}
-            target="_blank"
-            rel="noopener noreferrer"
             className="inline-block border border-mauve/60 text-mauve font-medium px-8 py-3 rounded-full hover:bg-mauve hover:text-white hover:border-mauve transition-all duration-200"
           >
             See Full Menu & Book
