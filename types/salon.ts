@@ -59,6 +59,7 @@ export interface Salon {
   heroImage: string
   colors?: SalonColors
   bookingUrl: string
+  bookingWidgetId: string
   firstVisitOffer?: string
   stats?: SalonStats
 }

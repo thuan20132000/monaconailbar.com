@@ -35,13 +35,13 @@ function getStaticSalonData(_slug: string): Salon {
       tiktok: 'https://tiktok.com/@monaconailbarbarrie',
     },
     hours: [
-      { day: 'Monday',    hours: '9:30 AM – 7:30 PM' },
-      { day: 'Tuesday',   hours: '9:30 AM – 7:30 PM' },
+      { day: 'Monday', hours: '9:30 AM – 7:30 PM' },
+      { day: 'Tuesday', hours: '9:30 AM – 7:30 PM' },
       { day: 'Wednesday', hours: '9:30 AM – 7:30 PM' },
-      { day: 'Thursday',  hours: '9:30 AM – 7:30 PM' },
-      { day: 'Friday',    hours: '9:30 AM – 7:30 PM' },
-      { day: 'Saturday',  hours: '10:00 AM – 6:00 PM' },
-      { day: 'Sunday',    hours: '10:00 AM – 5:00 PM' },
+      { day: 'Thursday', hours: '9:30 AM – 7:30 PM' },
+      { day: 'Friday', hours: '9:30 AM – 7:30 PM' },
+      { day: 'Saturday', hours: '10:00 AM – 6:00 PM' },
+      { day: 'Sunday', hours: '10:00 AM – 5:00 PM' },
     ],
     services: [
       {
@@ -121,7 +121,8 @@ function getStaticSalonData(_slug: string): Salon {
     ],
     heroImage:
       'https://i.pinimg.com/1200x/a6/57/c5/a657c5587cad07a39fcf7feee94a3fc4.jpg',
-    bookingUrl: '#booking',
+    bookingUrl: 'https://book.bookngon.com/monaco-nail-bar',
+    bookingWidgetId: 'monaco-nail-bar',
     firstVisitOffer: '15% Off Your First Visit',
     stats: {
       clients: 4000,
