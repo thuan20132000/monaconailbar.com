@@ -8,19 +8,11 @@ export default function BookingCTA({ salonName }: Props) {
   return (
     <section id="booking" className="bg-cream py-20 lg:py-28 scroll-mt-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <p className="text-[0.65rem] font-bold tracking-[0.22em] uppercase text-mauve mb-4">
-          Ready?
-        </p>
         <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-light text-charcoal leading-[1.1] mb-5 text-balance">
           Book Your{' '}
           <em className="italic text-mauve not-italic font-light">Perfect</em>{' '}
           Appointment
         </h2>
-        <p className="text-charcoal/55 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
-          Skip the phone tag. Browse real-time availability and book your next visit at{' '}
-          {salonName} in under 60 seconds.
-        </p>
-
         <div className="bg-white rounded-3xl shadow-xl shadow-mauve/10 overflow-hidden w-full max-w-4xl mx-auto h-[850px] border border-charcoal/5 relative mb-10">
           <iframe
             src="https://book.bookngon.com/monaco-nail-bar/booking"
