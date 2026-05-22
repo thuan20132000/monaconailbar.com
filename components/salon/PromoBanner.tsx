@@ -19,8 +19,6 @@ export default function PromoBanner({ offer, bookingUrl }: Props) {
       <span className="mx-3 text-white/40">—</span>
       <Link
         href={bookingUrl}
-        target="_blank"
-        rel="noopener noreferrer"
         className="font-semibold underline underline-offset-2 hover:text-blush transition-colors duration-200"
       >
         Book Now
