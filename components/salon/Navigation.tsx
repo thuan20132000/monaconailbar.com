@@ -12,14 +12,14 @@ interface Props {
 const NAV_LINKS = [
   { label: 'Services', href: '#services' },
   { label: 'Gallery', href: '#gallery' },
-  { label: 'About',   href: '#about' },
-  { label: 'Hours',   href: '#hours' },
+  { label: 'About', href: '#about' },
+  { label: 'Hours', href: '#hours' },
   { label: 'Contact', href: '#contact' },
 ]
 
 export default function Navigation({ name, bookingUrl }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [scrolled, setScrolled]     = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const [bannerVisible, setBannerVisible] = useState(true)
   const lastY = useRef(0)
 
@@ -41,20 +41,19 @@ export default function Navigation({ name, bookingUrl }: Props) {
   return (
     <header
       style={{ top: bannerVisible ? '44px' : '0px' }}
-      className={`sticky z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-cream-50/96 backdrop-blur-sm shadow-sm border-b border-blush/20'
-          : 'bg-cream-50'
-      }`}
+      className={`sticky z-50 transition-all duration-300 ${scrolled
+        ? 'bg-cream-50/96 backdrop-blur-sm shadow-sm border-b border-blush/20'
+        : 'bg-cream-50'
+        }`}
     >
-        <nav className="relative max-w-7xl mx-auto px-4 sm:px-6 h-32 flex items-center justify-center md:justify-between">
+      <nav className="relative max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-center md:justify-between">
         {/* Logo — centred on mobile, left-aligned on desktop */}
         <a href="#" className="flex items-center gap-2.5 group">
           <Image
             src="/logo.png"
             alt={name}
-            width={100}
-            height={100}
+            width={70}
+            height={70}
             className="rounded-full object-cover group-hover:opacity-85 transition-opacity duration-200"
             priority
           />
@@ -88,9 +87,8 @@ export default function Navigation({ name, bookingUrl }: Props) {
 
       {/* Mobile drawer */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ${
-          mobileOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
-        } border-t border-blush/20 bg-cream-50`}
+        className={`md:hidden overflow-hidden transition-all duration-300 ${mobileOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
+          } border-t border-blush/20 bg-cream-50`}
       >
         <ul className="px-4 sm:px-6 py-4 space-y-1">
           {NAV_LINKS.map(link => (

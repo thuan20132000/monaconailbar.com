@@ -29,14 +29,18 @@ export default async function Home() {
         <HeroSection salon={salon} />
         <TrustStrip firstVisitOffer={salon.firstVisitOffer} />
         <BookingCTA salonName={salon.name} />
-        <ServicesGrid services={salon.services} bookingUrl={salon.bookingUrl} />
+        <ServicesGrid
+          services={salon.services}
+          bookingUrl={salon.bookingUrl}
+          bookingWidgetId={salon.bookingWidgetId}
+        />
         <WhyChooseUs />
         <Gallery photos={salon.photos} salonName={salon.name} />
         <HoursContact salon={salon} />
       </main>
 
       <Footer salon={salon} />
-      <FloatingBookButton bookingUrl={salon.bookingUrl} />
+      {/* <FloatingBookButton bookingUrl={salon.bookingUrl} /> */}
     </div>
   )
 }
