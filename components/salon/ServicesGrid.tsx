@@ -5,9 +5,10 @@ import type { SalonService } from '@/types/salon'
 interface Props {
   services: SalonService[]
   bookingUrl: string
+  bookingWidgetId: string
 }
 
-export default function ServicesGrid({ services, bookingUrl }: Props) {
+export default function ServicesGrid({ services, bookingUrl, bookingWidgetId }: Props) {
   return (
     <section id="services" className="bg-cream py-20 lg:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,7 +42,7 @@ export default function ServicesGrid({ services, bookingUrl }: Props) {
                 {/* Hover overlay */}
                 <div className="absolute inset-0 bg-ink/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                   <Link
-                    href={bookingUrl}
+                    href="#booking"
                     className="bg-mauve text-ink text-sm font-semibold px-6 py-2.5 rounded-full hover:bg-mauve-dark hover:text-white transition-colors duration-200 translate-y-3 group-hover:translate-y-0 transition-transform duration-300"
                   >
                     Book This Service
@@ -55,9 +56,6 @@ export default function ServicesGrid({ services, bookingUrl }: Props) {
                   <h3 className="font-serif text-xl font-medium text-charcoal leading-snug">
                     {service.name}
                   </h3>
-                  <span className="text-sm font-semibold text-mauve whitespace-nowrap pt-0.5">
-                    from ${service.startingPrice}
-                  </span>
                 </div>
                 <p className="text-sm text-charcoal/55 leading-relaxed">{service.description}</p>
               </div>
@@ -68,7 +66,7 @@ export default function ServicesGrid({ services, bookingUrl }: Props) {
         {/* Bottom CTA */}
         <div className="text-center mt-12">
           <Link
-            href={bookingUrl}
+            href="#booking"
             className="inline-block border border-mauve/60 text-mauve font-medium px-8 py-3 rounded-full hover:bg-mauve hover:text-white hover:border-mauve transition-all duration-200"
           >
             See Full Menu & Book
