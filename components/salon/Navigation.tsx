@@ -12,7 +12,7 @@ interface Props {
 const NAV_LINKS = [
   { label: 'Services', href: '#services' },
   { label: 'Gallery', href: '#gallery' },
-  { label: 'About', href: '#about' },
+  { label: 'Menu', href: '/menu' },
   { label: 'Hours', href: '#hours' },
   { label: 'Contact', href: '#contact' },
 ]
