@@ -1,8 +1,8 @@
 import type { Salon } from '@/types/salon'
 
 export async function getSalon(slug: string): Promise<Salon> {
-  if (process.env.API_BASE_URL) {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/salons/${slug}`, {
+  if (process.env.NEXT_PUBLIC_API_BASE_URL) {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/business-booking/business-info?slug=${slug}`, {
       next: { revalidate: 3600 },
     })
     if (res.ok) return res.json()
@@ -35,12 +35,12 @@ function getStaticSalonData(_slug: string): Salon {
       tiktok: 'https://tiktok.com/@monaconailbarbarrie',
     },
     hours: [
-      { day: 'Monday', hours: '9:30 AM – 7:30 PM' },
-      { day: 'Tuesday', hours: '9:30 AM – 7:30 PM' },
-      { day: 'Wednesday', hours: '9:30 AM – 7:30 PM' },
-      { day: 'Thursday', hours: '9:30 AM – 7:30 PM' },
-      { day: 'Friday', hours: '9:30 AM – 7:30 PM' },
-      { day: 'Saturday', hours: '10:00 AM – 6:00 PM' },
+      { day: 'Monday', hours: '9:00 AM – 7:30 PM' },
+      { day: 'Tuesday', hours: '9:00 AM – 7:30 PM' },
+      { day: 'Wednesday', hours: '9:00 AM – 7:30 PM' },
+      { day: 'Thursday', hours: '9:00 AM – 7:30 PM' },
+      { day: 'Friday', hours: '9:00 AM – 7:30 PM' },
+      { day: 'Saturday', hours: '9:00 AM – 6:00 PM' },
       { day: 'Sunday', hours: '10:00 AM – 5:00 PM' },
     ],
     services: [
