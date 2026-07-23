@@ -10,6 +10,7 @@ import ReviewsSection from '@/components/salon/ReviewsSection'
 import HoursContact from '@/components/salon/HoursContact'
 import BookingCTA from '@/components/salon/BookingCTA'
 import Footer from '@/components/salon/Footer'
+import FloatingActionBar from '@/components/salon/FloatingActionBar'
 
 export const revalidate = 3600
 
@@ -17,7 +18,7 @@ export default async function Home() {
   const { salon, google } = await getSalonWithGoogle('monaco-nail-bar')
 
   return (
-    <div className="min-h-screen bg-cream font-sans">
+    <div className="min-h-screen bg-cream font-sans pb-20">
       <SalonContactBanner contact={salon.contact} bookingUrl={salon.bookingUrl} />
       {/* {salon.firstVisitOffer && (
         <PromoBanner offer={salon.firstVisitOffer} bookingUrl={salon.bookingUrl} />
@@ -40,7 +41,7 @@ export default async function Home() {
       </main>
 
       <Footer salon={salon} />
-      {/* <FloatingBookButton bookingUrl={salon.bookingUrl} /> */}
+      <FloatingActionBar bookingUrl={salon.bookingUrl} phone={salon.contact.phone} />
     </div>
   )
 }

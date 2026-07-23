@@ -61,12 +61,12 @@ export default function HeroSection({ salon }: Props) {
               >
                 Book Appointment
               </Link>
-              <a
-                href="#services"
+              <Link
+                href="/menu"
                 className="border border-charcoal/20 text-charcoal font-medium px-8 py-3.5 rounded-full hover:border-mauve hover:text-mauve transition-all duration-200"
               >
-                View Services
-              </a>
+                See Full Menu
+              </Link>
             </div>
 
             {/* Stats */}

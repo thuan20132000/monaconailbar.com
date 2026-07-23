@@ -66,7 +66,7 @@ export default function ServicesGrid({ services, bookingUrl, bookingWidgetId }: 
         {/* Bottom CTA */}
         <div className="text-center mt-12">
           <Link
-            href="#booking"
+            href="/menu/services"
             className="inline-block border border-mauve/60 text-mauve font-medium px-8 py-3 rounded-full hover:bg-mauve hover:text-white hover:border-mauve transition-all duration-200"
           >
             See Full Menu & Book
