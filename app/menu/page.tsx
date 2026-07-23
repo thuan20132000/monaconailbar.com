@@ -1,58 +1,55 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import MenuShell from '@/components/salon/MenuShell'
 
 export const metadata: Metadata = {
-  title: 'Drinks Menu | Monaco Nail Bar — Barrie, ON',
+  title: 'Menus | Monaco Nail Bar — Barrie, ON',
   description:
-    'Complimentary mocktails and cocktails with every nail service at Monaco Nail Bar. Tropical Sunrise, Cranberry Blue Ocean, Mango Sparkle, and more.',
+    'Browse Monaco Nail Bar service menus and complimentary drinks menu in Barrie, ON.',
 }
 
-export default function MenuPage() {
+const MENUS = [
+  {
+    href: '/menu/services',
+    label: 'Services Menu',
+    description: 'Full nail & spa service list with pricing',
+  },
+  {
+    href: '/menu/drinks',
+    label: 'Drinks Menu',
+    description: 'Complimentary mocktails & cocktails with every service',
+  },
+] as const
+
+export default function MenuHubPage() {
   return (
-    <main className="min-h-screen bg-black font-sans">
-      {/* Top bar */}
-      <div className="sticky top-0 z-50 bg-black/90 backdrop-blur-sm border-b border-white/10 pb-6">
-        <div className="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-white/70 hover:text-white text-sm transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.8}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Home
-          </Link>
-
-          <span className="text-white/40 text-xs tracking-widest uppercase">
-            Drinks Menu
-          </span>
+    <MenuShell title="Menus">
+      <div className="max-w-3xl mx-auto px-4 py-14 flex flex-col gap-5">
+        <div className="text-center mb-4">
+          <p className="text-[0.65rem] font-bold tracking-[0.22em] uppercase text-mauve mb-3">
+            Monaco Nail Bar
+          </p>
+          <h1 className="font-serif text-3xl sm:text-4xl font-light text-white">
+            Choose a Menu
+          </h1>
         </div>
-      </div>
 
-      {/* Menu image */}
-      <div className="max-w-3xl mx-auto px-4 py-8 flex flex-col items-center">
-        <Image
-          src="/menu-drinks.JPG"
-          alt="Monaco Nail Bar drinks menu — complimentary mocktails and cocktails with every nail service"
-          width={700}
-          height={1050}
-          priority
-          className="w-full h-auto rounded-sm shadow-2xl"
-        />
-
-        {/* Footer note */}
-        <p className="mt-8 text-white/40 text-xs tracking-wide text-center">
-          All drinks are complimentary with every service · Monaco Nail Bar · 31 Commerce Park Dr, Barrie ON
-        </p>
+        {MENUS.map(menu => (
+          <Link
+            key={menu.href}
+            href={menu.href}
+            className="group border border-white/15 hover:border-mauve/60 bg-white/[0.03] hover:bg-mauve/10 px-6 py-7 transition-all duration-200"
+          >
+            <p className="text-white text-lg font-medium tracking-wide group-hover:text-mauve transition-colors">
+              {menu.label}
+            </p>
+            <p className="mt-1.5 text-sm text-white/45">{menu.description}</p>
+            <p className="mt-4 text-xs tracking-wider uppercase text-mauve/80">
+              View menu →
+            </p>
+          </Link>
+        ))}
       </div>
-    </main>
+    </MenuShell>
   )
 }
