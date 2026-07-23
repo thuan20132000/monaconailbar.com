@@ -1,13 +1,40 @@
-import type { Salon } from '@/types/salon'
+import type { Salon, SalonGoogleReviews } from '@/types/salon'
+import { getGoogleReviews } from '@/lib/google-reviews'
 
 export async function getSalon(slug: string): Promise<Salon> {
   if (process.env.NEXT_PUBLIC_API_BASE_URL) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/business-booking/business-info?slug=${slug}`, {
-      next: { revalidate: 3600 },
-    })
-    if (res.ok) return res.json()
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/business-booking/business-info?slug=${slug}`,
+        { next: { revalidate: 3600 } }
+      )
+      if (res.ok) return res.json()
+    } catch {
+      // fall through to static data
+    }
   }
   return getStaticSalonData(slug)
+}
+
+export async function getSalonWithGoogle(slug: string): Promise<{
+  salon: Salon
+  google: SalonGoogleReviews | null
+}> {
+  const [salon, google] = await Promise.all([getSalon(slug), getGoogleReviews()])
+  console.log('google', google)
+  if (!google) return { salon, google: null }
+
+  return {
+    salon: {
+      ...salon,
+      stats: {
+        ...salon.stats,
+        rating: google.rating,
+        reviewCount: google.reviewCount,
+      },
+    },
+    google,
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -128,6 +155,7 @@ function getStaticSalonData(_slug: string): Salon {
       clients: 4000,
       yearsOpen: 5,
       rating: 4.9,
+      reviewCount: 400,
     },
   }
 }

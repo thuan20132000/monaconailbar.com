@@ -45,6 +45,30 @@ export interface SalonStats {
   clients?: number
   yearsOpen?: number
   rating?: number
+  reviewCount?: number
+}
+
+export interface SalonReview {
+  authorName: string
+  authorPhotoUrl?: string
+  rating: number
+  text: string
+  relativeTime: string
+  authorUri?: string
+}
+
+export interface SalonPlacePhoto {
+  url: string
+  width?: number
+  height?: number
+}
+
+export interface SalonGoogleReviews {
+  rating: number
+  reviewCount: number
+  reviews: SalonReview[]
+  photos: SalonPlacePhoto[]
+  mapsUri: string
 }
 
 export interface Salon {
