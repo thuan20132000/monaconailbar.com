@@ -34,8 +34,15 @@ Create a `.env.local` file in the project root:
 ```env
 # Optional — connect to the live Bookngon API.
 # If unset, the app falls back to hardcoded static data.
-API_BASE_URL=https://api.bookngon.com
+NEXT_PUBLIC_API_BASE_URL=https://api.bookngon.com
+
+# Optional — Google Places (reviews + place photos).
+# If unset, the Reviews section is hidden and static rating is used.
+GOOGLE_PLACES_API_KEY=your_google_places_api_key
+GOOGLE_PLACE_ID=ChIJ...
 ```
+
+For **AWS Amplify**, set the same keys in **App settings → Environment variables**. `amplify.yml` writes them into `.env.production` at build time — do not commit secrets into the repo.
 
 ## Project Structure
 

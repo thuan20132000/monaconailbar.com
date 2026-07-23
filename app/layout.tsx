@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Cormorant_Garamond, DM_Sans } from 'next/font/google'
-import { getSalon } from '@/lib/api'
+import { getSalonWithGoogle } from '@/lib/api'
 import './globals.css'
 
 const cormorant = Cormorant_Garamond({
@@ -21,7 +21,7 @@ const dmSans = DM_Sans({
 const SITE_URL = 'https://monaconailbar.com'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const salon = await getSalon('monaco-nail-bar')
+  const { salon } = await getSalonWithGoogle('monaco-nail-bar')
   const { name, contact, heroImage } = salon
   const city = contact.address.city
   const province = contact.address.province
@@ -140,7 +140,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const salon = await getSalon('monaco-nail-bar')
+  const { salon } = await getSalonWithGoogle('monaco-nail-bar')
   const { name, contact, hours, heroImage } = salon
 
   // Parse "9:30 AM – 7:30 PM" → { opens: "09:30", closes: "19:30" }
@@ -214,7 +214,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: salon.stats?.rating ?? 4.9,
-      reviewCount: salon.stats?.clients ?? 400,
+      reviewCount: salon.stats?.reviewCount ?? salon.stats?.clients ?? 400,
       bestRating: 5,
       worstRating: 1,
     },
