@@ -2,6 +2,9 @@ export interface SalonHours {
   day: string
   hours: string
   closed?: boolean
+  /** 24h "09:00" form, when known — lets JSON-LD skip parsing the display string. */
+  opens?: string
+  closes?: string
 }
 
 export interface SalonService {
@@ -33,6 +36,7 @@ export interface SalonContact {
   instagram?: string
   facebook?: string
   tiktok?: string
+  googleReviewUrl?: string
 }
 
 export interface SalonColors {

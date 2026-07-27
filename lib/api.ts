@@ -1,27 +1,41 @@
-import type { Salon, SalonGoogleReviews } from '@/types/salon'
+import { cache } from 'react'
+import type { Salon, SalonGoogleReviews, SalonHours, SalonPhoto } from '@/types/salon'
+import type { BusinessBanner, BusinessInfo, BusinessInfoResponse } from '@/types/business'
 import { getGoogleReviews } from '@/lib/google-reviews'
 
-export async function getSalon(slug: string): Promise<Salon> {
-  if (process.env.NEXT_PUBLIC_API_BASE_URL) {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/business-booking/business-info?slug=${slug}`,
-        { next: { revalidate: 3600 } }
-      )
-      if (res.ok) return res.json()
-    } catch {
-      // fall through to static data
+export const getSalon = cache(async (slug: string): Promise<Salon> => {
+  if (!process.env.NEXT_PUBLIC_API_BASE_URL) return getStaticSalonData(slug)
+
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/business-booking/business-info/?business_slug=${slug}`,
+      { next: { revalidate: 3600 } }
+    )
+
+    if (!res.ok) {
+      console.error('getSalon:: API responded', res.status)
+      return getStaticSalonData(slug)
     }
+
+    // The endpoint wraps the business record as { results, success, status_code }.
+    const data = (await res.json()) as BusinessInfoResponse
+    if (!data.results) {
+      console.error('getSalon:: response missing results envelope')
+      return getStaticSalonData(slug)
+    }
+
+    return mapBusinessToSalon(slug, data.results)
+  } catch (error) {
+    console.error('getSalon:: fetch failed', error)
+    return getStaticSalonData(slug)
   }
-  return getStaticSalonData(slug)
-}
+})
 
 export async function getSalonWithGoogle(slug: string): Promise<{
   salon: Salon
   google: SalonGoogleReviews | null
 }> {
   const [salon, google] = await Promise.all([getSalon(slug), getGoogleReviews()])
-  console.log('google', google)
   if (!google) return { salon, google: null }
 
   return {
@@ -38,7 +52,131 @@ export async function getSalonWithGoogle(slug: string): Promise<{
 }
 
 // ---------------------------------------------------------------------------
-// Static fallback — replace with real API data once available
+// API → view model
+//
+// The business-info endpoint owns contact, hours, gallery, banner and booking
+// link. It has no service menu, tagline, socials or stats, so we layer the API
+// values over the curated static record rather than building from scratch.
+// ---------------------------------------------------------------------------
+function mapBusinessToSalon(slug: string, api: BusinessInfo): Salon {
+  const base = getStaticSalonData(slug)
+
+  const photos = (api.gallery_images ?? [])
+    .filter(g => g.is_active && g.media_type === 'image' && Boolean(g.image))
+    .sort((a, b) => a.sort_order - b.sort_order || a.id - b.id)
+    .map<SalonPhoto>(g => ({
+      url: g.image as string,
+      alt: g.alt_text ?? `${base.name} — gallery photo`,
+    }))
+
+  const hours = (api.operating_hours ?? []).map<SalonHours>(h => {
+    const open = h.is_open && h.open_time && h.close_time
+    return {
+      day: h.day_name,
+      hours: open ? `${formatTime(h.open_time!)} – ${formatTime(h.close_time!)}` : 'Closed',
+      closed: !open,
+      opens: open ? toHourMinute(h.open_time!) : undefined,
+      closes: open ? toHourMinute(h.close_time!) : undefined,
+    }
+  })
+
+  return {
+    ...base,
+    slug: api.online_booking?.slug ?? base.slug,
+    description: api.description?.trim() || base.description,
+    contact: {
+      ...base.contact,
+      phone: formatPhone(api.phone_number) || base.contact.phone,
+      email: api.email?.trim() || base.contact.email,
+      address: {
+        street: api.address ? api.address.split(',')[0].trim() : base.contact.address.street,
+        city: api.city ?? base.contact.address.city,
+        province: normalizeProvince(api.state_province) ?? base.contact.address.province,
+        postalCode: api.postal_code ?? base.contact.address.postalCode,
+        country: normalizeCountry(api.country) ?? base.contact.address.country,
+      },
+      googleReviewUrl: api.google_review_url ?? undefined,
+    },
+    hours: hours.length > 0 ? hours : base.hours,
+    photos: photos.length > 0 ? photos : base.photos,
+    heroImage: photos[0]?.url ?? api.logo ?? base.heroImage,
+    bookingUrl: api.online_booking?.shareable_link ?? api.website ?? base.bookingUrl,
+    // A hidden or expired banner means "no offer" — don't fall back to the
+    // static promo string, or the site advertises something the salon retired.
+    firstVisitOffer: getActiveBannerMessage(api.active_banner),
+  }
+}
+
+function getActiveBannerMessage(banner?: BusinessBanner | null): string | undefined {
+  if (!banner || !banner.is_active || !banner.is_visible) return undefined
+  const now = Date.now()
+  if (banner.start_at && now < Date.parse(banner.start_at)) return undefined
+  if (banner.end_at && now > Date.parse(banner.end_at)) return undefined
+  return banner.message?.trim() || banner.title?.trim() || undefined
+}
+
+/** "7059056789" / "+17059056789" → "(705) 905-6789" */
+function formatPhone(raw: string | null): string {
+  if (!raw) return ''
+  const digits = raw.replace(/\D/g, '')
+  const local = digits.length === 11 && digits.startsWith('1') ? digits.slice(1) : digits
+  if (local.length !== 10) return raw
+  return `(${local.slice(0, 3)}) ${local.slice(3, 6)}-${local.slice(6)}`
+}
+
+/** "09:00:00" → "9:00 AM" — matches the display format the components expect. */
+function formatTime(raw: string): string {
+  const [hStr, mStr] = raw.split(':')
+  let hour = Number(hStr)
+  const period = hour >= 12 ? 'PM' : 'AM'
+  hour = hour % 12 || 12
+  return `${hour}:${(mStr ?? '00').padStart(2, '0')} ${period}`
+}
+
+/** "09:00:00" → "09:00" */
+function toHourMinute(raw: string): string {
+  const [hStr, mStr] = raw.split(':')
+  return `${hStr.padStart(2, '0')}:${(mStr ?? '00').padStart(2, '0')}`
+}
+
+const PROVINCE_CODES: Record<string, string> = {
+  alberta: 'AB',
+  'british columbia': 'BC',
+  manitoba: 'MB',
+  'new brunswick': 'NB',
+  'newfoundland and labrador': 'NL',
+  'northwest territories': 'NT',
+  'nova scotia': 'NS',
+  nunavut: 'NU',
+  ontario: 'ON',
+  'prince edward island': 'PE',
+  quebec: 'QC',
+  saskatchewan: 'SK',
+  yukon: 'YT',
+}
+
+function normalizeProvince(raw: string | null): string | undefined {
+  const value = raw?.trim()
+  if (!value) return undefined
+  return PROVINCE_CODES[value.toLowerCase()] ?? value
+}
+
+const COUNTRY_CODES: Record<string, string> = {
+  canada: 'CA',
+  'united states': 'US',
+  usa: 'US',
+}
+
+function normalizeCountry(raw: string | null): string | undefined {
+  const value = raw?.trim()
+  if (!value) return undefined
+  return COUNTRY_CODES[value.toLowerCase()] ?? value
+}
+
+// ---------------------------------------------------------------------------
+// Static fallback — used when the API is unreachable, and as the base layer for
+// fields the business-info endpoint does not expose (services, tagline, socials,
+// stats, bookingWidgetId).
 // ---------------------------------------------------------------------------
 function getStaticSalonData(_slug: string): Salon {
   return {
