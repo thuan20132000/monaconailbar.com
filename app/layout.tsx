@@ -167,7 +167,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const openingHoursSpecification = hours
     .filter(h => !h.closed)
     .flatMap(h => {
-      const parsed = parseHours(h.hours)
+      // API rows carry 24h times already; static rows still need parsing.
+      const parsed =
+        h.opens && h.closes ? { opens: h.opens, closes: h.closes } : parseHours(h.hours)
       if (!parsed || !DAY_ABBR[h.day]) return []
       return [{
         '@type': 'OpeningHoursSpecification',
@@ -183,6 +185,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       ? `https://instagram.com/${contact.instagram.replace('@', '')}`
       : null,
     contact.tiktok ?? null,
+    contact.googleReviewUrl ?? null,
   ].filter(Boolean)
 
   const jsonLd = {
