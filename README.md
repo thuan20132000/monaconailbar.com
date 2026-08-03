@@ -36,7 +36,7 @@ Create a `.env.local` file in the project root:
 # If unset, the app falls back to hardcoded static data.
 NEXT_PUBLIC_API_BASE_URL=https://api.bookngon.com
 
-# Optional — Google Places (reviews + place photos).
+# Optional — Google Places (reviews + rating only; place photos omitted to avoid Photo SKU cost).
 # If unset, the Reviews section is hidden and static rating is used.
 GOOGLE_PLACES_API_KEY=your_google_places_api_key
 GOOGLE_PLACE_ID=ChIJ...

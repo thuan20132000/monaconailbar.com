@@ -1,4 +1,4 @@
-import type { SalonGoogleReviews, SalonPlacePhoto, SalonReview } from '@/types/salon'
+import type { SalonGoogleReviews, SalonReview } from '@/types/salon'
 
 const PLACE_ID = process.env.GOOGLE_PLACE_ID
 const API_KEY = process.env.GOOGLE_PLACES_API_KEY
@@ -16,22 +16,11 @@ interface PlacesReview {
   authorAttribution?: PlacesAuthorAttribution
 }
 
-interface PlacesPhoto {
-  name?: string
-  widthPx?: number
-  heightPx?: number
-}
-
 interface PlacesDetailsResponse {
   rating?: number
   userRatingCount?: number
   reviews?: PlacesReview[]
-  photos?: PlacesPhoto[]
   googleMapsUri?: string
-}
-
-function photoMediaUrl(photoName: string, maxHeightPx = 800): string {
-  return `https://places.googleapis.com/v1/${photoName}/media?maxHeightPx=${maxHeightPx}&key=${API_KEY}`
 }
 
 export async function getGoogleReviews(): Promise<SalonGoogleReviews | null> {
@@ -42,8 +31,9 @@ export async function getGoogleReviews(): Promise<SalonGoogleReviews | null> {
     const res = await fetch(`https://places.googleapis.com/v1/${placePath}`, {
       headers: {
         'X-Goog-Api-Key': API_KEY,
+        // Intentionally omit `photos` — Place Photo media SKU is billed per request.
         'X-Goog-FieldMask':
-          'displayName,rating,userRatingCount,reviews,photos,googleMapsUri',
+          'displayName,rating,userRatingCount,reviews,googleMapsUri',
       },
       next: { revalidate: 3600 },
     })
@@ -66,20 +56,10 @@ export async function getGoogleReviews(): Promise<SalonGoogleReviews | null> {
       authorUri: r.authorAttribution?.uri,
     }))
 
-    const photos: SalonPlacePhoto[] = (data.photos ?? [])
-      .filter(p => Boolean(p.name))
-      .slice(0, 8)
-      .map(p => ({
-        url: photoMediaUrl(p.name!),
-        width: p.widthPx,
-        height: p.heightPx,
-      }))
-
     return {
       rating: data.rating,
       reviewCount: data.userRatingCount ?? reviews.length,
       reviews,
-      photos,
       mapsUri:
         data.googleMapsUri ??
         `https://www.google.com/maps/place/?q=place_id:${PLACE_ID.replace(/^places\//, '')}`,

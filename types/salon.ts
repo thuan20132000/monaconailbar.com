@@ -61,17 +61,10 @@ export interface SalonReview {
   authorUri?: string
 }
 
-export interface SalonPlacePhoto {
-  url: string
-  width?: number
-  height?: number
-}
-
 export interface SalonGoogleReviews {
   rating: number
   reviewCount: number
   reviews: SalonReview[]
-  photos: SalonPlacePhoto[]
   mapsUri: string
 }
 
