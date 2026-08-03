@@ -36,7 +36,7 @@ export default async function Home() {
         />
         <WhyChooseUs />
         <Gallery photos={salon.photos} salonName={salon.name} />
-        {google && <ReviewsSection google={google} salonName={salon.name} />}
+        {google && <ReviewsSection google={google} />}
         <HoursContact salon={salon} />
       </main>
 
