@@ -93,5 +93,4 @@ source of truth for fields the API doesn't serve. Note which parts are still cur
 ## Environment
 
 Copy `.env.example` → `.env`. Never commit real keys — `.env` is gitignored.
-`getGoogleReviews()` requests rating + reviews only (no Place Photos field) to avoid
-the Place Photo media SKU.
+`getGoogleReviews()` returns a static snapshot (no Places API) to avoid billing and abuse.

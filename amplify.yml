@@ -7,7 +7,7 @@ frontend:
     build:
       commands:
         # Inject Amplify Console env vars into Next.js production env
-        - env | grep -e NEXT_PUBLIC_API_BASE_URL -e GOOGLE_PLACES_API_KEY -e GOOGLE_PLACE_ID >> .env.production || true
+        - env | grep -e NEXT_PUBLIC_API_BASE_URL >> .env.production || true
         - npm run build
   artifacts:
     baseDirectory: .next
