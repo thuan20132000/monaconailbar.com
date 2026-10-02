@@ -35,14 +35,11 @@ Create a `.env.local` file in the project root:
 # Optional — connect to the live Bookngon API.
 # If unset, the app falls back to hardcoded static data.
 NEXT_PUBLIC_API_BASE_URL=https://api.bookngon.com
-
-# Optional — Google Places (reviews + rating only; place photos omitted to avoid Photo SKU cost).
-# If unset, the Reviews section is hidden and static rating is used.
-GOOGLE_PLACES_API_KEY=your_google_places_api_key
-GOOGLE_PLACE_ID=ChIJ...
 ```
 
-For **AWS Amplify**, set the same keys in **App settings → Environment variables**. `amplify.yml` writes them into `.env.production` at build time — do not commit secrets into the repo.
+Google reviews are served from a static snapshot in `lib/google-reviews.ts` (no Places API calls).
+
+For **AWS Amplify**, set `NEXT_PUBLIC_API_BASE_URL` in **App settings → Environment variables**. `amplify.yml` writes it into `.env.production` at build time — do not commit secrets into the repo.
 
 ## Project Structure
 
