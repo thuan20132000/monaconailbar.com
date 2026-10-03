@@ -9,6 +9,7 @@ import Gallery from '@/components/salon/Gallery'
 import ReviewsSection from '@/components/salon/ReviewsSection'
 import HoursContact from '@/components/salon/HoursContact'
 import BookingCTA from '@/components/salon/BookingCTA'
+import GiftCards from '@/components/salon/GiftCards'
 import Footer from '@/components/salon/Footer'
 import FloatingActionBar from '@/components/salon/FloatingActionBar'
 
@@ -23,17 +24,31 @@ export default async function Home() {
       {/* {salon.firstVisitOffer && (
         <PromoBanner offer={salon.firstVisitOffer} bookingUrl={salon.bookingUrl} />
       )} */}
-      <Navigation name={salon.name} bookingUrl={salon.bookingUrl} />
+      <Navigation
+        name={salon.name}
+        bookingUrl={salon.bookingUrl}
+        showGiftCards={Boolean(salon.giftCards?.length)}
+      />
 
       <main>
         <HeroSection salon={salon} />
-        <TrustStrip firstVisitOffer={salon.firstVisitOffer} />
-        <BookingCTA salonName={salon.name} />
+        <TrustStrip
+          firstVisitOffer={salon.firstVisitOffer}
+          giftCardsAvailable={Boolean(salon.giftCards?.length)}
+        />
+        <BookingCTA
+          salonName={salon.name}
+          giftCardsAvailable={Boolean(salon.giftCards?.length)}
+        />
+        {salon.giftCards && salon.giftCards.length > 0 && salon.giftCardUrl ? (
+          <GiftCards themes={salon.giftCards} giftCardUrl={salon.giftCardUrl} />
+        ) : null}
         <ServicesGrid
           services={salon.services}
           bookingUrl={salon.bookingUrl}
           bookingWidgetId={salon.bookingWidgetId}
         />
+
         <WhyChooseUs />
         <Gallery photos={salon.photos} salonName={salon.name} />
         {google && <ReviewsSection google={google} />}

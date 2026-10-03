@@ -68,6 +68,17 @@ export interface SalonGoogleReviews {
   mapsUri: string
 }
 
+export interface SalonGiftCardDesign {
+  id: number
+  name: string
+  image: string
+}
+
+export interface SalonGiftCardTheme {
+  name: string
+  designs: SalonGiftCardDesign[]
+}
+
 export interface Salon {
   slug: string
   name: string
@@ -83,4 +94,8 @@ export interface Salon {
   bookingWidgetId: string
   firstVisitOffer?: string
   stats?: SalonStats
+  /** Sellable themes from the public catalog. Absent when gift cards are unavailable. */
+  giftCards?: SalonGiftCardTheme[]
+  /** Absolute URL of the booking site's gift card purchase page. */
+  giftCardUrl?: string
 }

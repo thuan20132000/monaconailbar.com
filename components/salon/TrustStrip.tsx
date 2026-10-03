@@ -1,18 +1,21 @@
 interface Props {
   firstVisitOffer?: string
+  giftCardsAvailable?: boolean
 }
 
 const BASE_ITEMS = [
   { icon: '✓', label: 'Licensed Experts' },
   { icon: '⊕', label: 'Walk-ins Welcome' },
-  { icon: '◇', label: 'Gift Cards Available' },
   { icon: '♡', label: 'Birthday Perks' },
 ]
 
-export default function TrustStrip({ firstVisitOffer }: Props) {
-  const items = firstVisitOffer
-    ? [...BASE_ITEMS, { icon: '✦', label: firstVisitOffer }]
-    : BASE_ITEMS
+export default function TrustStrip({ firstVisitOffer, giftCardsAvailable }: Props) {
+  const items = [
+    ...BASE_ITEMS.slice(0, 2),
+    ...(giftCardsAvailable ? [{ icon: '◇', label: 'Gift Cards Available' }] : []),
+    ...BASE_ITEMS.slice(2),
+    ...(firstVisitOffer ? [{ icon: '✦', label: firstVisitOffer }] : []),
+  ]
 
   return (
     <section aria-label="Trust signals" className="bg-cream-200 border-y border-blush/30">

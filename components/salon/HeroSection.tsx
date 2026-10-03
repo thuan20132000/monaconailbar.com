@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function HeroSection({ salon }: Props) {
-  const { name, tagline, description, contact, heroImage, bookingUrl, stats, photos } = salon
+  const { name, tagline, description, contact, heroImage, bookingUrl, giftCardUrl, stats, photos } = salon
 
   const slides = [
     { url: heroImage, alt: `${name} — Nail Salon in ${contact.address.city}` },
@@ -61,6 +61,14 @@ export default function HeroSection({ salon }: Props) {
               >
                 Book Appointment
               </Link>
+              {giftCardUrl && (
+                <a
+                  href={giftCardUrl}
+                  className="border border-charcoal/20 text-charcoal font-medium px-8 py-3.5 rounded-full hover:border-mauve hover:text-mauve transition-all duration-200"
+                >
+                  Buy a Gift Card
+                </a>
+              )}
               <Link
                 href="/menu"
                 className="border border-charcoal/20 text-charcoal font-medium px-8 py-3.5 rounded-full hover:border-mauve hover:text-mauve transition-all duration-200"

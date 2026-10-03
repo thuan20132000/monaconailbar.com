@@ -1,6 +1,14 @@
+import { createHmac } from 'crypto'
 import { cache } from 'react'
-import type { Salon, SalonGoogleReviews, SalonHours, SalonPhoto } from '@/types/salon'
+import type {
+  Salon,
+  SalonGiftCardTheme,
+  SalonGoogleReviews,
+  SalonHours,
+  SalonPhoto,
+} from '@/types/salon'
 import type { BusinessBanner, BusinessInfo, BusinessInfoResponse } from '@/types/business'
+import type { GiftCardCatalogResponse, GiftCardCatalogTheme } from '@/types/gift-card'
 import { getGoogleReviews } from '@/lib/google-reviews'
 
 export const getSalon = cache(async (slug: string): Promise<Salon> => {
@@ -9,7 +17,7 @@ export const getSalon = cache(async (slug: string): Promise<Salon> => {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/business-booking/business-info/?business_slug=${slug}`,
-      { next: { revalidate: 3600 } }
+      { headers: apiSignatureHeaders('GET'), next: { revalidate: 3600 } }
     )
 
     if (!res.ok) {
@@ -24,7 +32,15 @@ export const getSalon = cache(async (slug: string): Promise<Salon> => {
       return getStaticSalonData(slug)
     }
 
-    return mapBusinessToSalon(slug, data.results)
+    const salon = mapBusinessToSalon(slug, data.results)
+    const giftCards = await getGiftCardThemes(data.results.id)
+    if (!giftCards?.length) return salon
+
+    return {
+      ...salon,
+      giftCards,
+      giftCardUrl: giftCardPageUrl(salon.bookingUrl, salon.slug),
+    }
   } catch (error) {
     console.error('getSalon:: fetch failed', error)
     return getStaticSalonData(slug)
@@ -104,6 +120,83 @@ function mapBusinessToSalon(slug: string, api: BusinessInfo): Salon {
     // A hidden or expired banner means "no offer" — don't fall back to the
     // static promo string, or the site advertises something the salon retired.
     firstVisitOffer: getActiveBannerMessage(api.active_banner),
+  }
+}
+
+async function getGiftCardThemes(businessId: string): Promise<SalonGiftCardTheme[] | undefined> {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
+  if (!baseUrl || !businessId) return undefined
+
+  try {
+    const res = await fetch(
+      `${baseUrl}/api/gift-card-catalog/?business_id=${encodeURIComponent(businessId)}`,
+      { headers: apiSignatureHeaders('GET'), next: { revalidate: 3600 } }
+    )
+
+    // 404 means online gift cards are turned off. Hide the section.
+    if (res.status === 404) return undefined
+    if (!res.ok) {
+      console.error('getGiftCardThemes:: API responded', res.status)
+      return undefined
+    }
+
+    const data = (await res.json()) as GiftCardCatalogResponse
+    const themes = mapGiftCardThemes(data.results?.themes ?? [])
+    return themes.length > 0 ? themes : undefined
+  } catch (error) {
+    console.error('getGiftCardThemes:: fetch failed', error)
+    return undefined
+  }
+}
+
+function mapGiftCardThemes(themes: GiftCardCatalogTheme[]): SalonGiftCardTheme[] {
+  return themes
+    .map(theme => ({
+      name: theme.name,
+      sortOrder: theme.sort_order,
+      designs: (theme.designs ?? [])
+        .filter(design => Boolean(design.image?.trim()))
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map(design => ({
+          id: design.id,
+          name: design.name,
+          image: design.image,
+        })),
+    }))
+    .filter(theme => theme.designs.length > 0)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map(({ name, designs }) => ({ name, designs }))
+}
+
+/**
+ * `/api/` calls need X-API-KEY, X-SIGNATURE, and X-TIMESTAMP.
+ * When the keys are unset, the request stays unsigned and the page falls back.
+ */
+function apiSignatureHeaders(method: string): Record<string, string> {
+  const publicKey = process.env.API_KEY
+  const secretKey = process.env.API_SIGNATURE_SECRET
+  if (!publicKey || !secretKey) return {}
+  const timestamp = Math.floor(Date.now() / 1000).toString()
+  const signature = createHmac('sha256', secretKey)
+    .update(`${method.toUpperCase()}|${timestamp}`)
+    .digest('hex')
+  return {
+    'X-API-KEY': publicKey,
+    'X-SIGNATURE': signature,
+    'X-TIMESTAMP': timestamp,
+  }
+}
+
+/** Booking site purchase page: https://book.bookngon.com/{slug}/gifts */
+function giftCardPageUrl(bookingUrl: string, slug: string): string {
+  try {
+    const url = new URL(bookingUrl)
+    url.pathname = `/${slug}/gifts`
+    url.search = ''
+    url.hash = ''
+    return url.toString()
+  } catch {
+    return `https://book.bookngon.com/${slug}/gifts`
   }
 }
 
