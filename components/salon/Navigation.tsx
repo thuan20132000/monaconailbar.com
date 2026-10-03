@@ -7,6 +7,7 @@ import Image from 'next/image'
 interface Props {
   name: string
   bookingUrl: string
+  showGiftCards?: boolean
 }
 
 const NAV_LINKS = [
@@ -17,7 +18,7 @@ const NAV_LINKS = [
   { label: 'Contact', href: '#contact' },
 ]
 
-export default function Navigation({ name, bookingUrl }: Props) {
+export default function Navigation({ name, showGiftCards }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [bannerVisible, setBannerVisible] = useState(true)
@@ -37,6 +38,10 @@ export default function Navigation({ name, bookingUrl }: Props) {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  const navLinks = showGiftCards
+    ? [NAV_LINKS[0], { label: 'Gift Cards', href: '#gift-cards' }, ...NAV_LINKS.slice(1)]
+    : NAV_LINKS
 
   return (
     <header
@@ -61,7 +66,7 @@ export default function Navigation({ name, bookingUrl }: Props) {
 
         {/* Desktop links */}
         <ul className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map(link => (
+          {navLinks.map(link => (
             <li key={link.label}>
               <a
                 href={link.href}
@@ -87,11 +92,11 @@ export default function Navigation({ name, bookingUrl }: Props) {
 
       {/* Mobile drawer */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ${mobileOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
+        className={`md:hidden overflow-hidden transition-all duration-300 ${mobileOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
           } border-t border-blush/20 bg-cream-50`}
       >
         <ul className="px-4 sm:px-6 py-4 space-y-1">
-          {NAV_LINKS.map(link => (
+          {navLinks.map(link => (
             <li key={link.label}>
               <a
                 href={link.href}

@@ -8,6 +8,8 @@ frontend:
       commands:
         # Inject Amplify Console env vars into Next.js production env
         - env | grep -e NEXT_PUBLIC_API_BASE_URL >> .env.production || true
+        - env | grep -e '^API_KEY=' >> .env.production || true
+        - env | grep -e '^API_SIGNATURE_SECRET=' >> .env.production || true
         - npm run build
   artifacts:
     baseDirectory: .next

@@ -1,12 +1,14 @@
 interface Props {
   salonName: string
+  giftCardsAvailable?: boolean
 }
 
-const BADGES = ['Gift Cards Available', 'Walk-ins Welcome', 'No Phone Call Needed']
+const BADGES = ['Walk-ins Welcome', 'No Phone Call Needed']
 
-export default function BookingCTA({ salonName }: Props) {
+export default function BookingCTA({ salonName, giftCardsAvailable }: Props) {
+  const badges = giftCardsAvailable ? ['Gift Cards Available', ...BADGES] : BADGES
   return (
-    <section id="booking" className="bg-cream py-20 lg:py-28 scroll-mt-20">
+    <section id="booking" className="bg-cream lg:py-28 scroll-mt-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-light text-charcoal leading-[1.1] mb-5 text-balance">
           Book Your{' '}
@@ -25,7 +27,7 @@ export default function BookingCTA({ salonName }: Props) {
 
         {/* Badge row */}
         <div className="flex flex-wrap justify-center gap-x-7 gap-y-3">
-          {BADGES.map((badge, i) => (
+          {badges.map((badge, i) => (
             <span key={i} className="flex items-center gap-1.5 text-sm text-charcoal/45">
               <span className="text-mauve text-[0.6rem]">✦</span>
               {badge}
