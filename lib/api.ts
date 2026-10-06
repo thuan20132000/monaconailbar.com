@@ -11,12 +11,14 @@ import type { BusinessBanner, BusinessInfo, BusinessInfoResponse } from '@/types
 import type { GiftCardCatalogResponse, GiftCardCatalogTheme } from '@/types/gift-card'
 import { getGoogleReviews } from '@/lib/google-reviews'
 
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
+
 export const getSalon = cache(async (slug: string): Promise<Salon> => {
-  if (!process.env.NEXT_PUBLIC_API_BASE_URL) return getStaticSalonData(slug)
+  if (!baseUrl) return getStaticSalonData(slug)
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/business-booking/business-info/?business_slug=${slug}`,
+      `${baseUrl}/api/business-booking/business-info/?business_slug=${slug}`,
       { headers: apiSignatureHeaders('GET'), next: { revalidate: 3600 } }
     )
 
@@ -124,12 +126,11 @@ function mapBusinessToSalon(slug: string, api: BusinessInfo): Salon {
 }
 
 async function getGiftCardThemes(businessId: string): Promise<SalonGiftCardTheme[] | undefined> {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
   if (!baseUrl || !businessId) return undefined
 
   try {
     const res = await fetch(
-      `${baseUrl}/api/gift-card-catalog/?business_id=${encodeURIComponent(businessId)}`,
+      `${baseUrl}/api/gift-card-catalog/?business_id=${businessId}`,
       { headers: apiSignatureHeaders('GET'), next: { revalidate: 3600 } }
     )
 
