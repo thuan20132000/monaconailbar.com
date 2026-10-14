@@ -33,6 +33,7 @@ export interface SalonContact {
   phone: string
   email: string
   address: SalonAddress
+  /** Full profile URLs. */
   instagram?: string
   facebook?: string
   tiktok?: string
@@ -79,9 +80,40 @@ export interface SalonGiftCardTheme {
   designs: SalonGiftCardDesign[]
 }
 
+export interface SalonWebsiteSlide {
+  url: string
+  alt: string
+  title?: string
+  caption?: string
+}
+
+export interface SalonWebsiteSections {
+  services: boolean
+  gallery: boolean
+  team: boolean
+  reviews: boolean
+  hours: boolean
+}
+
+/** Published website content. Absent until the salon publishes from the partners app. */
+export interface SalonWebsite {
+  tagline?: string
+  heroTitle: string
+  heroSubtitle?: string
+  heroCtaText: string
+  /** Markdown body — untrusted, must be sanitized when rendered. */
+  about?: { title: string; body: string }
+  seo: { title: string; description: string; image?: string }
+  googleMapsUrl?: string
+  sections: SalonWebsiteSections
+  slides: SalonWebsiteSlide[]
+  updatedAt: string
+}
+
 export interface Salon {
   slug: string
   name: string
+  logo?: string
   tagline: string
   description: string
   contact: SalonContact
@@ -98,4 +130,5 @@ export interface Salon {
   giftCards?: SalonGiftCardTheme[]
   /** Absolute URL of the booking site's gift card purchase page. */
   giftCardUrl?: string
+  website?: SalonWebsite
 }

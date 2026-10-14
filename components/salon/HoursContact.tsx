@@ -3,17 +3,20 @@ import type { Salon } from '@/types/salon'
 
 interface Props {
   salon: Salon
+  showHours?: boolean
 }
 
 const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 
-export default function HoursContact({ salon }: Props) {
+export default function HoursContact({ salon, showHours = true }: Props) {
   const { hours, contact } = salon
   const todayName = DAYS[new Date().getDay()]
 
-  const mapsUrl = `https://maps.google.com/?q=${encodeURIComponent(
-    `${contact.address.street}, ${contact.address.city}, ${contact.address.province}`
-  )}`
+  const mapsUrl =
+    salon.website?.googleMapsUrl ??
+    `https://maps.google.com/?q=${encodeURIComponent(
+      `${contact.address.street}, ${contact.address.city}, ${contact.address.province}`
+    )}`
 
   const embedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(
     `${contact.address.street}, ${contact.address.city}, ${contact.address.province} ${contact.address.postalCode}`
@@ -22,9 +25,10 @@ export default function HoursContact({ salon }: Props) {
   return (
     <section id="hours">
       {/* ── Row 1: Hours / Contact split ── */}
-      <div className="grid md:grid-cols-2">
+      <div className={`grid ${showHours ? 'md:grid-cols-2' : ''}`}>
 
         {/* Hours (light panel) */}
+        {showHours && (
         <div className="bg-cream-200 py-16 md:py-20">
           <div className="max-w-md ml-auto px-4 sm:px-8 md:pr-14 lg:pr-20">
             <p className="text-[0.65rem] font-bold tracking-[0.22em] uppercase text-mauve mb-3">
@@ -65,10 +69,11 @@ export default function HoursContact({ salon }: Props) {
             </table>
           </div>
         </div>
+        )}
 
         {/* Contact (accent panel) */}
         <div id="contact" className="bg-mauve text-white py-16 md:py-20">
-          <div className="max-w-md mr-auto px-4 sm:px-8 md:pl-14 lg:pl-20">
+          <div className={showHours ? 'max-w-md mr-auto px-4 sm:px-8 md:pl-14 lg:pl-20' : 'max-w-md mx-auto px-4 sm:px-8'}>
             <p className="text-[0.65rem] font-bold tracking-[0.22em] uppercase text-white/60 mb-3">
               Contact & Location
             </p>
@@ -112,6 +117,14 @@ export default function HoursContact({ salon }: Props) {
                     {contact.address.city}, {contact.address.province}{' '}
                     {contact.address.postalCode}
                   </p>
+                  <Link
+                    href={mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block text-sm font-medium underline underline-offset-4 decoration-white/40 hover:decoration-white mt-2"
+                  >
+                    Get directions
+                  </Link>
                 </div>
               </li>
 
@@ -140,7 +153,7 @@ export default function HoursContact({ salon }: Props) {
               <div className="mt-8 flex flex-wrap gap-3">
                 {contact.instagram && (
                   <Link
-                    href={`https://instagram.com/${contact.instagram.replace('@', '')}`}
+                    href={contact.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm font-medium border border-white/30 px-4 py-2 rounded-full hover:bg-white/10 transition-colors"
