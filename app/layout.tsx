@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Cormorant_Garamond, DM_Sans } from 'next/font/google'
 import { getSalonWithGoogle } from '@/lib/api'
+import { SEASON_THEME } from '@/lib/theme'
+import FallingLeaves from '@/components/salon/FallingLeaves'
 import './globals.css'
 
 const cormorant = Cormorant_Garamond({
@@ -254,8 +256,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <html lang="en" className={`${cormorant.variable} ${dmSans.variable}`}>
+    <html lang="en" data-theme={SEASON_THEME} className={`${cormorant.variable} ${dmSans.variable}`}>
       <body>
+        <FallingLeaves />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

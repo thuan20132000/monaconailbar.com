@@ -10,23 +10,23 @@ const config: Config = {
     extend: {
       colors: {
         cream: {
-          DEFAULT: '#000000',
-          50: '#111111',
-          100: '#000000',
-          200: '#1a1a1a',
+          DEFAULT: 'rgb(var(--cream) / <alpha-value>)',
+          50: 'rgb(var(--cream-50) / <alpha-value>)',
+          100: 'rgb(var(--cream-100) / <alpha-value>)',
+          200: 'rgb(var(--cream-200) / <alpha-value>)',
         },
         blush: {
-          DEFAULT: '#e8d5a3',
-          light: '#f0e5c0',
-          dark: '#d4b87a',
+          DEFAULT: 'rgb(var(--blush) / <alpha-value>)',
+          light: 'rgb(var(--blush-light) / <alpha-value>)',
+          dark: 'rgb(var(--blush-dark) / <alpha-value>)',
         },
         mauve: {
-          DEFAULT: '#caa343',
-          dark: '#a8892d',
-          deeper: '#8a7022',
+          DEFAULT: 'rgb(var(--mauve) / <alpha-value>)',
+          dark: 'rgb(var(--mauve-dark) / <alpha-value>)',
+          deeper: 'rgb(var(--mauve-deeper) / <alpha-value>)',
         },
-        charcoal: '#ffffff',
-        ink: '#111111',
+        charcoal: 'rgb(var(--charcoal) / <alpha-value>)',
+        ink: 'rgb(var(--ink) / <alpha-value>)',
       },
       fontFamily: {
         serif: ['var(--font-serif)', 'Georgia', 'serif'],
