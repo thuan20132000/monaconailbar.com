@@ -22,20 +22,27 @@ const SITE_URL = 'https://monaconailbar.com'
 
 export async function generateMetadata(): Promise<Metadata> {
   const { salon } = await getSalonWithGoogle('monaco-nail-bar')
-  const { name, contact, heroImage } = salon
+  const { name, contact, heroImage, website } = salon
   const city = contact.address.city
   const province = contact.address.province
 
-  const title = `${name} | Luxury Nail Salon & Spa in ${city}, ${province}`
-  const description = `${name} — ${city}'s top-rated luxury nail salon. Expert BIAB, Gel, Acrylic Extensions & Nail Art paired with a signature Cocktail & Mocktail experience. Book online instantly. E2 – 31 Commerce Park Dr, ${city}, ${province}.`
+  const title = website
+    ? website.seo.title
+    : `${name} | Luxury Nail Salon & Spa in ${city}, ${province}`
+  const description = website
+    ? website.seo.description
+    : `${name} — ${city}'s top-rated luxury nail salon. Expert BIAB, Gel, Acrylic Extensions & Nail Art paired with a signature Cocktail & Mocktail experience. Book online instantly. E2 – 31 Commerce Park Dr, ${city}, ${province}.`
 
-  const ogImage = {
-    url: heroImage,
-    width: 1200,
-    height: 630,
-    alt: `${name} — luxury nail salon & spa in ${city}, ${province}`,
-    type: 'image/jpeg' as const,
-  }
+  // Published sites supply their own image; its size and type are unknown.
+  const ogImage = website
+    ? { url: website.seo.image ?? heroImage, alt: website.slides[0]?.alt ?? name }
+    : {
+        url: heroImage,
+        width: 1200,
+        height: 630,
+        alt: `${name} — luxury nail salon & spa in ${city}, ${province}`,
+        type: 'image/jpeg' as const,
+      }
 
   const keywords = [
     // Primary local intent
@@ -111,8 +118,6 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       images: [ogImage],
-      creator: contact.instagram ?? undefined,
-      site: contact.instagram ?? undefined,
     },
 
     alternates: {
@@ -141,7 +146,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { salon } = await getSalonWithGoogle('monaco-nail-bar')
-  const { name, contact, hours, heroImage } = salon
+  const { name, contact, hours, heroImage, website } = salon
 
   // Parse "9:30 AM – 7:30 PM" → { opens: "09:30", closes: "19:30" }
   function parseHours(raw: string): { opens: string; closes: string } | null {
@@ -180,10 +185,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     })
 
   const sameAs = [
-    contact.facebook,
-    contact.instagram
-      ? `https://instagram.com/${contact.instagram.replace('@', '')}`
-      : null,
+    contact.facebook ?? null,
+    contact.instagram ?? null,
     contact.tiktok ?? null,
     contact.googleReviewUrl ?? null,
   ].filter(Boolean)
@@ -196,7 +199,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     url: SITE_URL,
     telephone: contact.phone,
     email: contact.email,
-    image: heroImage,
+    image: website?.seo.image ?? heroImage,
     priceRange: '$$',
     currenciesAccepted: 'CAD',
     paymentAccepted: 'Cash, Credit Card, Debit Card',
@@ -227,9 +230,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       { '@type': 'LocationFeatureSpecification', name: 'Cocktail & Mocktail Experience', value: true },
     ],
     sameAs,
-    hasMap: `https://maps.google.com/?q=${encodeURIComponent(
-      `${contact.address.street}, ${contact.address.city}, ${contact.address.province}`
-    )}`,
+    hasMap:
+      website?.googleMapsUrl ??
+      `https://maps.google.com/?q=${encodeURIComponent(
+        `${contact.address.street}, ${contact.address.city}, ${contact.address.province}`
+      )}`,
     potentialAction: {
       '@type': 'ReserveAction',
       target: {

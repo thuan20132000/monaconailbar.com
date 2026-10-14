@@ -83,6 +83,40 @@ export interface BusinessBanner {
   updated_at: string
 }
 
+export interface PublicWebsiteSlide {
+  id: number
+  image: string
+  alt_text: string
+  title: string
+  caption: string
+  sort_order: number
+}
+
+/** Present only once the salon publishes its website; text fields are '' when unset. */
+export interface PublicWebsiteSettings {
+  is_published: true
+  tagline: string
+  hero_title: string
+  hero_subtitle: string
+  hero_cta_text: string
+  about_title: string
+  about_body: string
+  seo_title: string
+  seo_description: string
+  instagram_url: string | null
+  facebook_url: string | null
+  tiktok_url: string | null
+  google_maps_url: string | null
+  show_services: boolean
+  show_gallery: boolean
+  show_team: boolean
+  show_reviews: boolean
+  show_hours: boolean
+  /** Already filtered to currently-scheduled slides and sorted by sort_order. */
+  slides: PublicWebsiteSlide[]
+  updated_at: string
+}
+
 export interface BusinessInfo {
   id: string
   name: string
@@ -106,6 +140,7 @@ export interface BusinessInfo {
   online_booking: BusinessOnlineBooking | null
   active_banner?: BusinessBanner | null
   gallery_images: BusinessGalleryImage[]
+  website_settings?: PublicWebsiteSettings | null
 }
 
 export interface BusinessInfoResponse {

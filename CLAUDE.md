@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 npm install      # install deps
 npm run dev      # dev server at localhost:3000
-npm run build    # production build (Next.js ISR, revalidate=3600)
+npm run build    # production build (Next.js ISR, revalidate=300)
 npm run lint     # ESLint
 npm run start    # serve production build
 ```
@@ -37,19 +37,33 @@ npm run start    # serve production build
 - `getSalonWithGoogle` merges the live Google rating/reviewCount into `salon.stats`.
 - `getSalon` is wrapped in React `cache()` — it's called from `generateMetadata`, `RootLayout`,
   and `page.tsx` on every render.
-- `export const revalidate = 3600` triggers ISR; both fetches use `next: { revalidate: 3600 }`.
+- **Website content (`website_settings`) is API-owned.** Staff edit it in the partners app;
+  `mapWebsite` turns it into `salon.website` (hero copy, slides, Markdown about, SEO,
+  `google_maps_url`, `show_*` section toggles). Once published, the `*_url` socials replace the
+  static ones — a null URL hides that icon. `website_settings: null` means "not published":
+  `salon.website` is `undefined` and the page renders the default template (no hero, all
+  sections on, static socials). Never treat null as an error.
+- Slides arrive pre-filtered (active, in schedule) and sorted — never filter by date client-side.
+  Because they expire on their own, `page.tsx` uses `revalidate = 300` and the business-info
+  fetch uses `next: { revalidate: 300 }`. The gift card fetch stays at 3600.
+- `about_body` is untrusted Markdown: `AboutSection` renders it with `react-markdown`
+  (`skipHtml`) + `rehype-sanitize`. All other text fields are plain text.
+- `contact.instagram/facebook/tiktok` are full URLs, not handles.
 
 **SEO + Schema:**
 - `app/layout.tsx` — exports `generateMetadata` (OG, Twitter, canonical) and injects a `<script type="application/ld+json">` `BeautySalon` schema.
+  When published, title/description/OG image come from `salon.website.seo`
+  (`seo_title || name` ≤70, `seo_description || description` ≤160, `slides[0] || logo`).
 
 **Component tree** (all in `components/salon/`):
 ```
 PromoBanner          ← 'use client', dismissible top bar
 Navigation           ← 'use client', sticky + hamburger
-HeroSection          ← split layout, CSS fade-up animations
+HeroSection          ← 'use client', full-bleed slideshow from website.slides (published only)
 TrustStrip           ← static trust signals row
 ServicesGrid         ← 3→2→1 col card grid, hover overlay
-WhyChooseUs          ← dark bg section, 3-card USP
+AboutSection         ← sanitized Markdown about_body (published + non-empty only)
+WhyChooseUs          ← dark bg section, 3-card USP (#why-us)
 Gallery              ← masonry CSS grid, first image row-span-2
 HoursContact         ← full-bleed 2-panel split (light/mauve)
 BookingCTA           ← centred CTA + badge row
@@ -87,8 +101,9 @@ source of truth for fields the API doesn't serve. Note which parts are still cur
   The static copies of these are only a safety net and may drift (e.g. the static postal code
   is stale — the API is authoritative).
 - **Curated, edit here:** `services` (name/description/price/image), `tagline`, `stats`,
-  `bookingWidgetId`, and the `instagram`/`facebook`/`tiktok` handles. The service images are
-  still stock pinimg/etsy URLs.
+  `bookingWidgetId`, and the `instagram`/`facebook`/`tiktok` URLs (used only while the website is
+  unpublished). The service images are still stock pinimg/etsy URLs.
+- `show_team` is mapped to `website.sections.team`, but there is no team section yet.
 
 ## Environment
 

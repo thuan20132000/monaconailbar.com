@@ -39,9 +39,6 @@ const PhoneIcon = () => (
 )
 
 export default function SalonContactBanner({ contact, bookingUrl }: Props) {
-  const instagramHandle = contact.instagram?.replace('@', '')
-  const instagramUrl = instagramHandle ? `https://instagram.com/${instagramHandle}` : null
-
   const [visible, setVisible] = useState(true)
   const lastY = useRef(0)
 
@@ -61,7 +58,7 @@ export default function SalonContactBanner({ contact, bookingUrl }: Props) {
 
   const socials = [
     contact.facebook && { href: contact.facebook, label: 'Facebook', Icon: FacebookIcon },
-    instagramUrl    && { href: instagramUrl,       label: 'Instagram', Icon: InstagramIcon },
+    contact.instagram && { href: contact.instagram, label: 'Instagram', Icon: InstagramIcon },
     contact.tiktok  && { href: contact.tiktok,     label: 'TikTok',    Icon: TikTokIcon },
   ].filter(Boolean) as { href: string; label: string; Icon: () => JSX.Element }[]
 

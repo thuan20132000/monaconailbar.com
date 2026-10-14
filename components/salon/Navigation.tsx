@@ -8,6 +8,8 @@ interface Props {
   name: string
   bookingUrl: string
   showGiftCards?: boolean
+  /** In-page anchors for sections the salon has turned off. */
+  hiddenHrefs?: string[]
 }
 
 const NAV_LINKS = [
@@ -18,7 +20,7 @@ const NAV_LINKS = [
   { label: 'Contact', href: '#contact' },
 ]
 
-export default function Navigation({ name, showGiftCards }: Props) {
+export default function Navigation({ name, showGiftCards, hiddenHrefs = [] }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [bannerVisible, setBannerVisible] = useState(true)
@@ -39,9 +41,11 @@ export default function Navigation({ name, showGiftCards }: Props) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const navLinks = showGiftCards
-    ? [NAV_LINKS[0], { label: 'Gift Cards', href: '#gift-cards' }, ...NAV_LINKS.slice(1)]
-    : NAV_LINKS
+  const navLinks = (
+    showGiftCards
+      ? [NAV_LINKS[0], { label: 'Gift Cards', href: '#gift-cards' }, ...NAV_LINKS.slice(1)]
+      : NAV_LINKS
+  ).filter(link => !hiddenHrefs.includes(link.href))
 
   return (
     <header

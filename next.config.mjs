@@ -16,7 +16,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'snapslearning-bk.s3.amazonaws.com',
+        hostname: '**.amazonaws.com',
       },
       {
         protocol: 'https',

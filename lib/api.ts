@@ -6,8 +6,14 @@ import type {
   SalonGoogleReviews,
   SalonHours,
   SalonPhoto,
+  SalonWebsite,
 } from '@/types/salon'
-import type { BusinessBanner, BusinessInfo, BusinessInfoResponse } from '@/types/business'
+import type {
+  BusinessBanner,
+  BusinessInfo,
+  BusinessInfoResponse,
+  PublicWebsiteSettings,
+} from '@/types/business'
 import type { GiftCardCatalogResponse, GiftCardCatalogTheme } from '@/types/gift-card'
 import { getGoogleReviews } from '@/lib/google-reviews'
 
@@ -19,7 +25,8 @@ export const getSalon = cache(async (slug: string): Promise<Salon> => {
   try {
     const res = await fetch(
       `${baseUrl}/api/business-booking/business-info/?business_slug=${slug}`,
-      { headers: apiSignatureHeaders('GET'), next: { revalidate: 3600 } }
+      // Scheduled slides appear and expire on their own, so keep this short.
+      { headers: apiSignatureHeaders('GET'), next: { revalidate: 300 } }
     )
 
     if (!res.ok) {
@@ -98,12 +105,26 @@ function mapBusinessToSalon(slug: string, api: BusinessInfo): Salon {
     }
   })
 
+  const description = api.description?.trim() || base.description
+  const name = api.name?.trim() || base.name
+  const settings = api.website_settings
+  const logo = api.logo ?? undefined
+
   return {
     ...base,
+    name,
+    logo,
     slug: api.online_booking?.slug ?? base.slug,
-    description: api.description?.trim() || base.description,
+    description,
+    website: settings ? mapWebsite(settings, name, description, logo) : undefined,
     contact: {
       ...base.contact,
+      // Once published, the partners app owns the socials — a null URL means "hide".
+      ...(settings && {
+        instagram: settings.instagram_url ?? undefined,
+        facebook: settings.facebook_url ?? undefined,
+        tiktok: settings.tiktok_url ?? undefined,
+      }),
       phone: formatPhone(api.phone_number) || base.contact.phone,
       email: api.email?.trim() || base.contact.email,
       address: {
@@ -123,6 +144,53 @@ function mapBusinessToSalon(slug: string, api: BusinessInfo): Salon {
     // static promo string, or the site advertises something the salon retired.
     firstVisitOffer: getActiveBannerMessage(api.active_banner),
   }
+}
+
+function mapWebsite(
+  s: PublicWebsiteSettings,
+  name: string,
+  description: string,
+  logo?: string
+): SalonWebsite {
+  const heroTitle = s.hero_title?.trim() || name
+  const aboutBody = s.about_body?.trim()
+  const slides = (s.slides ?? [])
+    .filter(slide => Boolean(slide.image))
+    .map(slide => ({
+      url: slide.image,
+      alt: slide.alt_text?.trim() || heroTitle,
+      title: slide.title?.trim() || undefined,
+      caption: slide.caption?.trim() || undefined,
+    }))
+
+  return {
+    tagline: s.tagline?.trim() || undefined,
+    heroTitle,
+    heroSubtitle: s.hero_subtitle?.trim() || undefined,
+    heroCtaText: s.hero_cta_text?.trim() || 'Book now',
+    about: aboutBody
+      ? { title: s.about_title?.trim() || 'About us', body: aboutBody }
+      : undefined,
+    seo: {
+      title: clip(s.seo_title?.trim() || name, 70),
+      description: clip(s.seo_description?.trim() || description, 160),
+      image: slides[0]?.url ?? logo,
+    },
+    googleMapsUrl: s.google_maps_url ?? undefined,
+    sections: {
+      services: s.show_services,
+      gallery: s.show_gallery,
+      team: s.show_team,
+      reviews: s.show_reviews,
+      hours: s.show_hours,
+    },
+    slides,
+    updatedAt: s.updated_at,
+  }
+}
+
+function clip(text: string, max: number): string {
+  return text.length <= max ? text : `${text.slice(0, max - 1).trimEnd()}…`
 }
 
 async function getGiftCardThemes(businessId: string): Promise<SalonGiftCardTheme[] | undefined> {
@@ -274,7 +342,7 @@ function normalizeCountry(raw: string | null): string | undefined {
 // ---------------------------------------------------------------------------
 function getStaticSalonData(_slug: string): Salon {
   return {
-    slug: 'monaco-nail-bar',
+    slug: process.env.NEXT_PUBLIC_SALON_SLUG || 'test-2',
     name: 'Monaco Nail Bar',
     tagline: "Barrie's Top Destination for Luxury Nails & Spa",
     description:
@@ -289,7 +357,7 @@ function getStaticSalonData(_slug: string): Salon {
         postalCode: 'L4N 8A4',
         country: 'CA',
       },
-      instagram: '@monaconailbarbarrie',
+      instagram: 'https://instagram.com/monaconailbarbarrie',
       facebook: 'https://facebook.com/monaconailbar',
       tiktok: 'https://tiktok.com/@monaconailbarbarrie',
     },
