@@ -6,6 +6,7 @@ import TrustStrip from '@/components/salon/TrustStrip'
 import ServicesGrid from '@/components/salon/ServicesGrid'
 import WhyChooseUs from '@/components/salon/WhyChooseUs'
 import AboutSection from '@/components/salon/AboutSection'
+import PoliciesSection from '@/components/salon/PoliciesSection'
 import Gallery from '@/components/salon/Gallery'
 import ReviewsSection from '@/components/salon/ReviewsSection'
 import HoursContact from '@/components/salon/HoursContact'
@@ -78,6 +79,9 @@ export default async function Home() {
         <WhyChooseUs />
         {show.gallery && <Gallery photos={salon.photos} salonName={salon.name} />}
         {show.reviews && google && <ReviewsSection google={google} />}
+        {website?.policies && (
+          <PoliciesSection title={website.policies.title} body={website.policies.body} />
+        )}
         <HoursContact salon={salon} showHours={show.hours} />
       </main>
 

@@ -77,6 +77,9 @@ export async function generateMetadata(): Promise<Metadata> {
     'best nail salon Barrie Ontario',
   ]
 
+  // Published: website_url is authoritative and may be null, which means omit canonical/og:url.
+  const canonicalUrl = website ? website.url : SITE_URL
+
   return {
     metadataBase: new URL(SITE_URL),
     title,
@@ -106,7 +109,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: SITE_URL,
+      url: canonicalUrl,
       siteName: name,
       locale: 'en_CA',
       type: 'website',
@@ -120,9 +123,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [ogImage],
     },
 
-    alternates: {
-      canonical: SITE_URL,
-    },
+    alternates: canonicalUrl ? { canonical: canonicalUrl } : undefined,
 
     other: {
       'pinterest-rich-pin': 'true',
@@ -139,7 +140,7 @@ export async function generateMetadata(): Promise<Metadata> {
       'business:contact_data:postal_code': contact.address.postalCode,
       'business:contact_data:country_name': 'Canada',
       'business:contact_data:phone_number': contact.phone,
-      'business:contact_data:website': SITE_URL,
+      'business:contact_data:website': canonicalUrl ?? SITE_URL,
     },
   }
 }
@@ -196,7 +197,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     '@type': 'BeautySalon',
     name,
     description: salon.description,
-    url: SITE_URL,
+    url: website?.url ?? SITE_URL,
     telephone: contact.phone,
     email: contact.email,
     image: website?.seo.image ?? heroImage,

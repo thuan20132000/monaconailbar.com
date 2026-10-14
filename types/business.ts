@@ -95,12 +95,17 @@ export interface PublicWebsiteSlide {
 /** Present only once the salon publishes its website; text fields are '' when unset. */
 export interface PublicWebsiteSettings {
   is_published: true
+  /** This site's own address — canonical/og:url. Not the booking link. */
+  website_url: string | null
   tagline: string
   hero_title: string
   hero_subtitle: string
   hero_cta_text: string
   about_title: string
   about_body: string
+  /** Website policies — separate from online_booking.policy, which is the booking page's. */
+  policies_title: string
+  policies_body: string
   seo_title: string
   seo_description: string
   instagram_url: string | null
