@@ -1,6 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Color tokens are RGB channels so Tailwind opacity modifiers keep working.
+   "default" is the current black-and-gold palette. */
+:root,
+[data-theme='default'] {
+    --cream: 0 0 0;
+    --cream-50: 17 17 17;
+    --cream-100: 0 0 0;
+    --cream-200: 26 26 26;
+    --blush: 232 213 163;
+    --blush-light: 240 229 192;
+    --blush-dark: 212 184 122;
+    --mauve: 202 163 67;
+    --mauve-dark: 168 137 45;
+    --mauve-deeper: 138 112 34;
+    --charcoal: 255 255 255;
+    --ink: 17 17 17;
+}
+
+[data-theme='autumn'] {
+    --cream: 250 243 232;
+    --cream-50: 255 248 240;
+    --cream-100: 247 236 220;
+    --cream-200: 242 228 208;
+    --blush: 232 184 122;
+    --blush-light: 244 214 170;
+    --blush-dark: 184 120 64;
+    --mauve: 176 74 42;
+    --mauve-dark: 138 52 28;
+    --mauve-deeper: 110 40 22;
+    --charcoal: 62 36 24;
+    --ink: 42 24 16;
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -20,5 +54,44 @@ html {
 @layer utilities {
     .text-balance {
         text-wrap: balance;
+    }
+}
+
+@keyframes leaf-fall {
+    0% {
+        transform: translate3d(0, -12vh, 0) rotate(0deg);
+    }
+    100% {
+        transform: translate3d(var(--leaf-drift), 112vh, 0) rotate(var(--leaf-spin));
+    }
+}
+
+@keyframes leaf-sway {
+    0%,
+    100% {
+        transform: translateX(-10px) rotate(-18deg);
+    }
+    50% {
+        transform: translateX(14px) rotate(22deg);
+    }
+}
+
+.falling-leaf {
+    top: -12vh;
+    animation-name: leaf-fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform;
+}
+
+.leaf-sway {
+    animation-name: leaf-sway;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .falling-leaves {
+        display: none;
     }
 }
