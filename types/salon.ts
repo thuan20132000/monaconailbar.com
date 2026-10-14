@@ -101,8 +101,11 @@ export interface SalonWebsite {
   heroTitle: string
   heroSubtitle?: string
   heroCtaText: string
-  /** Markdown body — untrusted, must be sanitized when rendered. */
+  /** Canonical address of this site; undefined means omit canonical/og:url. */
+  url?: string
+  /** Markdown bodies — untrusted, must be sanitized when rendered. */
   about?: { title: string; body: string }
+  policies?: { title: string; body: string }
   seo: { title: string; description: string; image?: string }
   googleMapsUrl?: string
   sections: SalonWebsiteSections

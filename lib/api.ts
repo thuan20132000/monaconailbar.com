@@ -154,6 +154,7 @@ function mapWebsite(
 ): SalonWebsite {
   const heroTitle = s.hero_title?.trim() || name
   const aboutBody = s.about_body?.trim()
+  const policiesBody = s.policies_body?.trim()
   const slides = (s.slides ?? [])
     .filter(slide => Boolean(slide.image))
     .map(slide => ({
@@ -164,12 +165,16 @@ function mapWebsite(
     }))
 
   return {
+    url: s.website_url?.trim() || undefined,
     tagline: s.tagline?.trim() || undefined,
     heroTitle,
     heroSubtitle: s.hero_subtitle?.trim() || undefined,
     heroCtaText: s.hero_cta_text?.trim() || 'Book now',
     about: aboutBody
       ? { title: s.about_title?.trim() || 'About us', body: aboutBody }
+      : undefined,
+    policies: policiesBody
+      ? { title: s.policies_title?.trim() || 'Policies', body: policiesBody }
       : undefined,
     seo: {
       title: clip(s.seo_title?.trim() || name, 70),

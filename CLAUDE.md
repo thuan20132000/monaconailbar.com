@@ -46,8 +46,13 @@ npm run start    # serve production build
 - Slides arrive pre-filtered (active, in schedule) and sorted — never filter by date client-side.
   Because they expire on their own, `page.tsx` uses `revalidate = 300` and the business-info
   fetch uses `next: { revalidate: 300 }`. The gift card fetch stays at 3600.
-- `about_body` is untrusted Markdown: `AboutSection` renders it with `react-markdown`
-  (`skipHtml`) + `rehype-sanitize`. All other text fields are plain text.
+- `about_body` and `policies_body` are untrusted Markdown: render them only through
+  `SafeMarkdown` (`react-markdown` with `skipHtml` + `rehype-sanitize`). `AboutSection` and
+  `PoliciesSection` (`#policies`, plus a footer link) are hidden when their body is empty.
+  `policies_body` is the website's policy text, not `online_booking.policy`. All other text
+  fields are plain text.
+- `website_url` drives canonical and `og:url`. When published with a null `website_url`, both
+  are omitted; when unpublished, the hardcoded `SITE_URL` stays.
 - `contact.instagram/facebook/tiktok` are full URLs, not handles.
 
 **SEO + Schema:**
@@ -63,6 +68,7 @@ HeroSection          ← 'use client', full-bleed slideshow from website.slides 
 TrustStrip           ← static trust signals row
 ServicesGrid         ← 3→2→1 col card grid, hover overlay
 AboutSection         ← sanitized Markdown about_body (published + non-empty only)
+PoliciesSection      ← sanitized Markdown policies_body (published + non-empty only)
 WhyChooseUs          ← dark bg section, 3-card USP (#why-us)
 Gallery              ← masonry CSS grid, first image row-span-2
 HoursContact         ← full-bleed 2-panel split (light/mauve)

@@ -1,9 +1,8 @@
-import ReactMarkdown from 'react-markdown'
-import rehypeSanitize from 'rehype-sanitize'
+import SafeMarkdown from '@/components/salon/SafeMarkdown'
 
 interface Props {
   title: string
-  /** Staff-authored Markdown — untrusted. Raw HTML is dropped and the output sanitized. */
+  /** Untrusted Markdown. */
   body: string
 }
 
@@ -17,20 +16,7 @@ export default function AboutSection({ title, body }: Props) {
         <h2 className="font-serif text-4xl sm:text-5xl font-light text-charcoal text-center text-balance mb-10">
           {title}
         </h2>
-
-        <div className="text-charcoal/75 text-lg leading-relaxed space-y-5 [&_strong]:font-semibold [&_strong]:text-charcoal [&_em]:italic [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:mt-1.5 [&_h1]:font-serif [&_h1]:text-3xl [&_h2]:font-serif [&_h2]:text-2xl [&_h3]:font-serif [&_h3]:text-xl [&_h1]:text-charcoal [&_h2]:text-charcoal [&_h3]:text-charcoal [&_blockquote]:border-l-2 [&_blockquote]:border-mauve [&_blockquote]:pl-4 [&_blockquote]:italic [&_a]:text-mauve [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-mauve-dark">
-          <ReactMarkdown
-            skipHtml
-            rehypePlugins={[rehypeSanitize]}
-            components={{
-              a: ({ node: _node, ...props }) => (
-                <a {...props} target="_blank" rel="noopener noreferrer" />
-              ),
-            }}
-          >
-            {body}
-          </ReactMarkdown>
-        </div>
+        <SafeMarkdown>{body}</SafeMarkdown>
       </div>
     </section>
   )

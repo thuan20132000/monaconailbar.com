@@ -17,6 +17,7 @@ export default function Footer({ salon, hiddenHrefs = [] }: Props) {
     { label: 'About',    href: website?.about ? '#about' : '#why-us' },
     { label: 'Hours',    href: '#hours' },
     { label: 'Contact',  href: '#contact' },
+    ...(website?.policies ? [{ label: 'Policies', href: '#policies' }] : []),
   ].filter(link => !hiddenHrefs.includes(link.href))
 
   return (
