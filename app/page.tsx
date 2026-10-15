@@ -14,6 +14,7 @@ import BookingCTA from '@/components/salon/BookingCTA'
 import GiftCards from '@/components/salon/GiftCards'
 import Footer from '@/components/salon/Footer'
 import FloatingActionBar from '@/components/salon/FloatingActionBar'
+import { HolidayNotes, HolidayOffer } from '@/components/salon/ChristmasExtras'
 
 export const revalidate = 300
 
@@ -45,6 +46,7 @@ export default async function Home() {
         bookingUrl={salon.bookingUrl}
         showGiftCards={Boolean(salon.giftCards?.length)}
         hiddenHrefs={hiddenHrefs}
+        theme={salon.theme}
       />
 
       <main>
@@ -54,7 +56,11 @@ export default async function Home() {
             bookingUrl={salon.bookingUrl}
             name={salon.name}
             logo={salon.logo}
+            theme={salon.theme}
           />
+        )}
+        {salon.theme === 'winter' && (
+          <HolidayOffer offer={salon.firstVisitOffer} bookingUrl={salon.bookingUrl} />
         )}
         <TrustStrip
           firstVisitOffer={salon.firstVisitOffer}
@@ -63,6 +69,7 @@ export default async function Home() {
         <BookingCTA
           salonName={salon.name}
           giftCardsAvailable={Boolean(salon.giftCards?.length)}
+          theme={salon.theme}
         />
         {salon.giftCards && salon.giftCards.length > 0 && salon.giftCardUrl ? (
           <GiftCards themes={salon.giftCards} giftCardUrl={salon.giftCardUrl} />
@@ -72,6 +79,7 @@ export default async function Home() {
             services={salon.services}
             bookingUrl={salon.bookingUrl}
             bookingWidgetId={salon.bookingWidgetId}
+            theme={salon.theme}
           />
         )}
 
@@ -83,6 +91,7 @@ export default async function Home() {
           <PoliciesSection title={website.policies.title} body={website.policies.body} />
         )}
         <HoursContact salon={salon} showHours={show.hours} />
+        {salon.theme === 'winter' && <HolidayNotes email={salon.contact.email} />}
       </main>
 
       <Footer salon={salon} hiddenHrefs={hiddenHrefs} />

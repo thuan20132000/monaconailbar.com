@@ -1,3 +1,5 @@
+import type { SeasonTheme } from '@/lib/theme'
+
 export interface SalonHours {
   day: string
   hours: string
@@ -134,4 +136,6 @@ export interface Salon {
   /** Absolute URL of the booking site's gift card purchase page. */
   giftCardUrl?: string
   website?: SalonWebsite
+  /** Published website theme, or "default" when the site is unpublished. */
+  theme: SeasonTheme
 }

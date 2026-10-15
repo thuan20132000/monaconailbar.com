@@ -35,6 +35,54 @@
     --ink: 42 24 16;
 }
 
+/* Snow, evergreen, gold, cranberry, and ice. */
+[data-theme='winter'] {
+    --cream: 247 249 250;
+    --cream-50: 255 255 255;
+    --cream-100: 226 236 242;
+    --cream-200: 214 228 224;
+    --blush: 212 175 90;
+    --blush-light: 232 214 160;
+    --blush-dark: 176 140 62;
+    --mauve: 158 59 69;
+    --mauve-dark: 124 46 56;
+    --mauve-deeper: 92 32 40;
+    --charcoal: 22 48 38;
+    --ink: 12 36 28;
+}
+
+/* Warm white, leaf green, and blossom pink. */
+[data-theme='spring'] {
+    --cream: 252 248 244;
+    --cream-50: 255 252 248;
+    --cream-100: 244 236 230;
+    --cream-200: 236 228 220;
+    --blush: 168 196 140;
+    --blush-light: 196 216 170;
+    --blush-dark: 96 128 74;
+    --mauve: 214 120 148;
+    --mauve-dark: 184 90 118;
+    --mauve-deeper: 150 64 92;
+    --charcoal: 48 42 40;
+    --ink: 36 28 32;
+}
+
+/* Warm white, sand, coral, and sky blue. */
+[data-theme='summer'] {
+    --cream: 255 250 244;
+    --cream-50: 255 252 246;
+    --cream-100: 245 236 220;
+    --cream-200: 236 224 200;
+    --blush: 120 176 210;
+    --blush-light: 176 210 230;
+    --blush-dark: 70 140 180;
+    --mauve: 232 122 98;
+    --mauve-dark: 196 88 68;
+    --mauve-deeper: 156 64 48;
+    --charcoal: 48 40 36;
+    --ink: 36 44 52;
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -91,7 +139,54 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .falling-leaves {
+    .falling-leaves,
+    .snowfall,
+    .fairy-bulb {
         display: none;
+    }
+}
+
+[data-theme='winter'] body {
+    background-image:
+        radial-gradient(ellipse 80% 40% at 50% -10%, rgb(197 216 228 / 0.55), transparent 60%),
+        linear-gradient(180deg, rgb(247 249 250), rgb(236 243 241));
+}
+
+.snowflake {
+    top: -8vh;
+    border-radius: 9999px;
+    background: white;
+    box-shadow: 0 0 8px rgb(197 216 228 / 0.9);
+    animation-name: snow-fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform;
+}
+
+@keyframes snow-fall {
+    0% {
+        transform: translate3d(0, -8vh, 0);
+    }
+    100% {
+        transform: translate3d(var(--snow-drift), 110vh, 0);
+    }
+}
+
+.fairy-bulb {
+    width: 7px;
+    height: 10px;
+    border-radius: 9999px;
+    background: var(--bulb);
+    box-shadow: 0 0 10px 2px var(--bulb);
+    animation: fairy-glow 2.8s ease-in-out infinite;
+}
+
+@keyframes fairy-glow {
+    0%,
+    100% {
+        opacity: 0.45;
+    }
+    50% {
+        opacity: 1;
     }
 }

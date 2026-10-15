@@ -4,17 +4,20 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import type { SalonWebsite } from '@/types/salon'
+import type { SeasonTheme } from '@/lib/theme'
+import { HeroWinterFrame } from '@/components/salon/ChristmasExtras'
 
 interface Props {
   website: SalonWebsite
   bookingUrl: string
   name: string
   logo?: string
+  theme: SeasonTheme
 }
 
 const AUTO_ADVANCE_MS = 5500
 
-export default function HeroSection({ website, bookingUrl, name, logo }: Props) {
+export default function HeroSection({ website, bookingUrl, name, logo, theme }: Props) {
   const { tagline, heroTitle, heroSubtitle, heroCtaText, slides } = website
   const count = slides.length
   const isSlideshow = count > 1
@@ -107,9 +110,10 @@ export default function HeroSection({ website, bookingUrl, name, logo }: Props) 
         aria-hidden
         className="absolute inset-0 -z-10 bg-gradient-to-t from-ink/85 via-ink/45 to-ink/10"
       />
+      {theme === 'winter' && <HeroWinterFrame />}
 
       {/* ── Copy ── */}
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-24 pt-32">
+      <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-24 pt-32">
         <div className="max-w-2xl">
           {tagline && (
             <p className="animate-fade-up text-[0.68rem] font-bold tracking-[0.22em] uppercase text-blush mb-4">

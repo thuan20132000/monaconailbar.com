@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import type { SeasonTheme } from '@/lib/theme'
 
 interface Props {
   name: string
@@ -10,6 +11,7 @@ interface Props {
   showGiftCards?: boolean
   /** In-page anchors for sections the salon has turned off. */
   hiddenHrefs?: string[]
+  theme: SeasonTheme
 }
 
 const NAV_LINKS = [
@@ -20,7 +22,7 @@ const NAV_LINKS = [
   { label: 'Contact', href: '#contact' },
 ]
 
-export default function Navigation({ name, showGiftCards, hiddenHrefs = [] }: Props) {
+export default function Navigation({ name, showGiftCards, hiddenHrefs = [], theme }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [bannerVisible, setBannerVisible] = useState(true)
@@ -50,10 +52,13 @@ export default function Navigation({ name, showGiftCards, hiddenHrefs = [] }: Pr
   return (
     <header
       style={{ top: bannerVisible ? '44px' : '0px' }}
-      className={`sticky z-50 transition-all duration-300 ${scrolled
-        ? 'bg-cream-50/96 backdrop-blur-sm shadow-sm border-b border-blush/20'
-        : 'bg-cream-50'
-        }`}
+      className={`sticky z-50 transition-all duration-300 ${
+        theme === 'winter'
+          ? 'bg-white/55 backdrop-blur-xl shadow-sm border-b border-white/80'
+          : scrolled
+            ? 'bg-cream-50/96 backdrop-blur-sm shadow-sm border-b border-blush/20'
+            : 'bg-cream-50'
+      }`}
     >
       <nav className="relative max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-center md:justify-between">
         {/* Logo — centred on mobile, left-aligned on desktop */}

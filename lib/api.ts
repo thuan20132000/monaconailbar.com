@@ -16,6 +16,7 @@ import type {
 } from '@/types/business'
 import type { GiftCardCatalogResponse, GiftCardCatalogTheme } from '@/types/gift-card'
 import { getGoogleReviews } from '@/lib/google-reviews'
+import { resolveTheme } from '@/lib/theme'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
 
@@ -117,6 +118,7 @@ function mapBusinessToSalon(slug: string, api: BusinessInfo): Salon {
     slug: api.online_booking?.slug ?? base.slug,
     description,
     website: settings ? mapWebsite(settings, name, description, logo) : undefined,
+    theme: settings ? resolveTheme(settings.theme) : 'default',
     contact: {
       ...base.contact,
       // Once published, the partners app owns the socials — a null URL means "hide".
@@ -462,5 +464,6 @@ function getStaticSalonData(_slug: string): Salon {
       rating: 4.9,
       reviewCount: 400,
     },
+    theme: 'default',
   }
 }
