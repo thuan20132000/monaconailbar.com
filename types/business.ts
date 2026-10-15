@@ -117,6 +117,8 @@ export interface PublicWebsiteSettings {
   show_team: boolean
   show_reviews: boolean
   show_hours: boolean
+  /** Page look from the partners app. Unknown values resolve to default. */
+  theme: 'default' | 'autumn' | 'summer' | 'winter' | 'spring'
   /** Already filtered to currently-scheduled slides and sorted by sort_order. */
   slides: PublicWebsiteSlide[]
   updated_at: string

@@ -1,14 +1,16 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import type { SalonService } from '@/types/salon'
+import type { SeasonTheme } from '@/lib/theme'
 
 interface Props {
   services: SalonService[]
   bookingUrl: string
   bookingWidgetId: string
+  theme: SeasonTheme
 }
 
-export default function ServicesGrid({ services, bookingUrl, bookingWidgetId }: Props) {
+export default function ServicesGrid({ services, bookingUrl, bookingWidgetId, theme }: Props) {
   return (
     <section id="services" className="bg-cream py-20 lg:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,10 +18,10 @@ export default function ServicesGrid({ services, bookingUrl, bookingWidgetId }: 
         {/* Header */}
         <div className="text-center mb-14">
           <p className="text-[0.65rem] font-bold tracking-[0.22em] uppercase text-mauve mb-3">
-            Our Services
+            {theme === 'winter' ? 'This season' : 'Our Services'}
           </p>
           <h2 className="font-serif text-4xl sm:text-5xl font-light text-charcoal text-balance">
-            Crafted for <em className="italic text-mauve not-italic font-light">Every</em> Occasion
+            Crafted for <em className="italic text-mauve not-italic font-light">{theme === 'winter' ? 'the holidays' : 'Every'}</em>{theme === 'winter' ? '' : ' Occasion'}
           </h2>
         </div>
 
@@ -43,7 +45,7 @@ export default function ServicesGrid({ services, bookingUrl, bookingWidgetId }: 
                 <div className="absolute inset-0 bg-ink/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                   <Link
                     href="#booking"
-                    className="bg-mauve text-ink text-sm font-semibold px-6 py-2.5 rounded-full hover:bg-mauve-dark hover:text-white transition-colors duration-200 translate-y-3 group-hover:translate-y-0 transition-transform duration-300"
+                    className={`bg-mauve ${theme === 'winter' ? 'text-white' : 'text-ink'} text-sm font-semibold px-6 py-2.5 rounded-full hover:bg-mauve-dark hover:text-white transition-colors duration-200 translate-y-3 group-hover:translate-y-0 transition-transform duration-300`}
                   >
                     Book This Service
                   </Link>
